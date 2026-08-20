@@ -1,41 +1,71 @@
-# Job Search Engine
+# Job Search MCP
 
-Fast, reliable job search across 5 major pharmaceutical companies.
+A configuration-driven **Model Context Protocol (MCP)** server for searching jobs directly from company career websites.
 
-Search for jobs directly from Amgen, Bayer, GSK, Novartis, and Pfizer career websites. Extract job titles, descriptions, requirements, and apply links instantly.
+Allows AI assistants (Claude, ChatGPT) to search and extract job listings from **5 pharmaceutical companies** with extensible architecture for unlimited company additions.
 
-**Demo:** https://[your-vercel-app].vercel.app/
+**Current Coverage:** Amgen, Bayer, GSK, Novartis, Pfizer  
+**Expandable to:** 250+ companies (healthcare, tech, finance sectors)
 
 ## Features
 
-- ✅ Search across 5 companies simultaneously
-- ✅ Extract detailed job information (title, description, requirements, expiry)
-- ✅ Track failed extractions with error codes (404s, timeouts, etc.)
-- ✅ Generate CSV reports with results
-- ✅ Zero external dependencies, fast regex-based parsing
-- ✅ TypeScript + strict type safety
-- ✅ Comprehensive error handling and classification
-- ✅ Rate-limited API (5 searches/day/IP)
+- ✅ MCP-compatible job search tool for AI assistants
+- ✅ Configuration-driven company support (JSON-based, no code changes needed)
+- ✅ Extract detailed job information: title, description, requirements, expiry date, apply links
+- ✅ Intelligent error tracking: classify 404s, timeouts, network errors, parse errors
+- ✅ Generate CSV reports for batch processing
+- ✅ Zero external parsing dependencies (pure regex-based extraction)
+- ✅ TypeScript strict mode with full type safety
+- ✅ Company-specific HTML parsers (Workday, Eightfold AI, Drupal platforms)
+- ✅ Optional web demo at `/demo` for manual job search
+- ✅ Comprehensive test suite (4 professional tests)
 
 ## Technology Stack
 
-- **Frontend:** React + TypeScript + Tailwind CSS
-- **Backend:** Next.js + Node.js
-- **Parsing:** Regex-based HTML extraction (no heavy dependencies)
-- **Runtime:** Node.js (v18+)
-- **Language:** TypeScript 5.3+
+- **Protocol:** Model Context Protocol (MCP) SDK (TypeScript)
+- **Runtime:** Node.js v18+ (LTS recommended: v18, v20, v22)
+- **Language:** TypeScript 5.3+ (strict mode)
+- **Parsing:** Regex-based HTML extraction (no Puppeteer, jsdom, or Cheerio)
 - **Build:** TypeScript Compiler (tsc)
-- **Deployment:** Vercel (recommended) or AWS Lambda
+- **Optional Web UI:** React + Next.js + Tailwind CSS (for manual searching)
+- **Testing:** Native Node.js (no jest/mocha required)
 
 ## Quick Start
 
-### Try the Demo
+### As an MCP Server (For AI Integration)
 
-Visit: `https://[your-vercel-app].vercel.app/`
+1. **Install & Build:**
+```bash
+npm install
+npm run build
+```
 
-You'll be redirected to the job search interface. Enter a job title, select companies, and browse results instantly.
+2. **Start the MCP Server:**
+```bash
+npm start
+# Server runs on stdio (ready for Claude Desktop, Cursor, or other MCP clients)
+```
 
-### Local Development
+3. **Configure in Claude Desktop** (`~/.claude/claude_desktop_config.json`):
+```json
+{
+  "mcpServers": {
+    "job-search": {
+      "command": "node",
+      "args": ["path/to/dist/server.js"]
+    }
+  }
+}
+```
+
+4. **Use in Claude:**
+```
+User: "Find me senior manager jobs at Amgen and Pfizer"
+Claude: (uses MCP search tool)
+Claude: "I found 12 senior manager positions with details..."
+```
+
+### As a Local CLI Tool
 
 ```bash
 # Install dependencies
@@ -44,67 +74,71 @@ npm install
 # Build TypeScript
 npm run build
 
-# Run a test
+# Run job search tests
+npm run test
 node dist/test/test-manager-jobs.js
-
-# Start development server (requires Next.js setup)
-npm run dev
 ```
 
-### Production Deployment
+### Optional: Web Demo for Manual Browsing
 
+Deploy the included React demo to Vercel (optional):
 ```bash
-# Deploy to Vercel (recommended)
-npm install -g vercel
-vercel
-
-# Or deploy to AWS
-# See docs/DEPLOYMENT.md for AWS Lambda setup
+# Deploy demo at https://[your-app].vercel.app/
+vercel deploy
 ```
 
 ## Project Architecture
 
+### As MCP Server (Primary)
 ```
-User searches for jobs → Demo page (/app/demo/page.tsx)
-                          ↓
-                    React UI Component
-                    - Search input
-                    - Company multi-select
-                    - Sortable results tables
-                    ↓
-                   REST API (/api/search-jobs)
-                    ↓
-    ┌───────────────┬────────────────┬────────────────┐
-    │               │                │                │
-  Amgen          Bayer            GSK           Novartis  Pfizer
-(Workday)   (Eightfold AI)    (Workday)      (Drupal)   (Workday)
-    │               │                │                │
-    └───────────────┴────────────────┴────────────────┘
-                    ↓
-          Search Executor (src/search-executor.ts)
-          - Fetches job URLs from each site
-          - Parses HTML for job listings
-          ↓
-    Extractor Registry (src/extractors/)
-    - Extracts job details from each URL
-    - Company-specific parsers
-    - Error tracking & classification
-          ↓
-    Extraction Helpers (src/extraction-helpers.ts)
-    - CSV report generation
-    - Error aggregation
-          ↓
-    REST API Response (JSON)
-          ↓
-    Demo Page displays results
-    - Success table: Jobs with details
-    - Error table: Failed extractions
-    - Download CSV buttons
+Claude / AI Assistant
+        ↓
+    MCP Client Protocol (stdio)
+        ↓
+   MCP Server (src/server.ts)
+        ↓
+  Search Tool Handler
+        ↓
+┌──────────────────────────────────────┐
+│  SearchExecutor (src/search-executor.ts)
+│  - Orchestrates job searches
+│  - Fetches from career site URLs
+│  - Parses HTML for job listings
+└──────────────────────────────────────┘
+        ↓
+┌──────────┬──────────┬──────────┬──────────┬──────────┐
+│          │          │          │          │          │
+Amgen    Bayer      GSK     Novartis    Pfizer
+│          │          │          │          │
+└──────────┴──────────┴──────────┴──────────┴──────────┘
+        ↓
+ExtractorRegistry (src/extractors/)
+- 5 Company-specific parsers
+- Extract: jobTitle, description, requirements, applyLink
+- Track errors with classification
+        ↓
+Return JSON to AI Assistant
+```
+
+### Optional: Web Demo
+```
+User → Web Browser
+        ↓
+  React Component (app/demo/page.tsx)
+        ↓
+  Next.js API Route (app/api/search-jobs/route.ts)
+        ↓
+  SearchExecutor (same as MCP uses)
+        ↓
+  Results + CSV reports
 ```
 
 ## Configuration
 
 `src/config.json` is the source of truth for the companies that the project supports.
+
+**Current:** 5 companies (Amgen, Bayer, GSK, Novartis, Pfizer)  
+**Expandable:** Add unlimited companies via JSON configuration (no code changes needed)
 
 Example:
 
@@ -114,9 +148,35 @@ Example:
   "sites": [
     {
       "name": "Amgen",
-      "search_url": "https://amgen.wd1.myworkdayjobs.com/Careers?q=Engineer"
+      "search_url": "https://amgen.wd1.myworkdayjobs.com/Careers?q={SEARCH_TERM}"
     },
     {
+      "name": "Bayer",
+      "search_url": "https://bayer.eightfold.ai/careers?query={SEARCH_TERM}"
+    }
+  ]
+}
+```
+
+### Adding New Companies
+
+To add a new company:
+1. **Create config entry:** Add to `src/config.json` with company name and search URL
+2. **Create site definition:** Add `sites/company-name.json` with search parameters
+3. **Create extractor:** Add `src/extractors/company-name.ts` with HTML parsing rules (only if using new platform)
+4. **Register extractor:** Add to `src/extractors/index.ts`
+
+**No rebuild needed** - configuration is loaded at runtime.
+
+### Company Platform Support
+
+| Platform | Companies | File |
+|----------|-----------|------|
+| Workday | Amgen, Pfizer, GSK | `src/extractors/amgen.ts`, etc. |
+| Eightfold AI | Bayer | `src/extractors/bayer.ts` |
+| Drupal | Novartis | `src/extractors/novartis.ts` |
+
+**Extensibility:** Adding 50+ more companies only requires JSON config + reusable platform extractors
       "name": "Pfizer",
       "search_url": "..."
     }
