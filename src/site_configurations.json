@@ -1,0 +1,271 @@
+{
+  "amgen": {
+    "name": "Amgen Careers",
+    "type": "workday",
+    "enabled": true,
+    "urls": {
+      "base": "https://amgen.wd1.myworkdayjobs.com/Careers",
+      "search": "https://amgen.wd1.myworkdayjobs.com/Careers?q={keyword}",
+      "jobDetail": "https://amgen.wd1.myworkdayjobs.com{path}?q={keyword}"
+    },
+    "searchParameters": {
+      "keyword": {
+        "paramName": "q",
+        "type": "string",
+        "required": true,
+        "encoding": "url",
+        "caseSensitive": false
+      }
+    },
+    "filters": {
+      "location": {
+        "paramName": "location",
+        "type": "select",
+        "encoding": "url",
+        "dynamicValues": true,
+        "placeholder": "Select Location"
+      },
+      "timeType": {
+        "paramName": "timeType",
+        "type": "select",
+        "encoding": "url",
+        "dynamicValues": true,
+        "placeholder": "Select Time Type"
+      },
+      "country": {
+        "paramName": "country",
+        "type": "select",
+        "encoding": "url",
+        "dynamicValues": true,
+        "placeholder": "Select Country/Territory"
+      }
+    },
+    "pagination": {
+      "type": "pageNumber",
+      "paramName": "page",
+      "startIndex": 0,
+      "perPage": 10
+    },
+    "resultsIndicator": "JOBS FOUND",
+    "jobIdPattern": "R-[0-9]{6}",
+    "notes": "Workday-based careers portal. Standard query parameter structure."
+  },
+  "pfizer": {
+    "name": "Pfizer Careers",
+    "type": "workday",
+    "enabled": true,
+    "urls": {
+      "base": "https://pfizer.wd1.myworkdayjobs.com/en-US/PfizerCareers",
+      "search": "https://pfizer.wd1.myworkdayjobs.com/en-US/PfizerCareers?q={keyword}",
+      "jobDetail": "https://pfizer.wd1.myworkdayjobs.com/en-US/PfizerCareers/job/{path}?q={keyword}"
+    },
+    "searchParameters": {
+      "keyword": {
+        "paramName": "q",
+        "type": "string",
+        "required": true,
+        "encoding": "url",
+        "caseSensitive": false
+      }
+    },
+    "filters": {
+      "location": {
+        "paramName": "location",
+        "type": "select",
+        "encoding": "url",
+        "dynamicValues": true
+      },
+      "timeType": {
+        "paramName": "timeType",
+        "type": "select",
+        "encoding": "url",
+        "dynamicValues": true
+      },
+      "postingDate": {
+        "paramName": "postingDate",
+        "type": "select",
+        "encoding": "url",
+        "dynamicValues": true
+      }
+    },
+    "pagination": {
+      "type": "pageNumber",
+      "paramName": "page",
+      "startIndex": 0,
+      "perPage": 6
+    },
+    "resultsIndicator": "JOBS FOUND",
+    "jobIdPattern": "[0-9]{7}",
+    "notes": "Similar to Amgen but with locale-specific URL. Supports multiple locations per job posting."
+  },
+  "novartis": {
+    "name": "Novartis Career Search",
+    "type": "drupal_custom",
+    "enabled": true,
+    "urls": {
+      "base": "https://www.novartis.com/careers/career-search",
+      "search": "https://www.novartis.com/careers/career-search?search_api_fulltext={keyword}",
+      "jobDetail": "https://www.novartis.com/careers/career-search/job/details/{jobId}"
+    },
+    "searchParameters": {
+      "keyword": {
+        "paramName": "search_api_fulltext",
+        "type": "string",
+        "required": false,
+        "encoding": "url",
+        "caseSensitive": false
+      }
+    },
+    "filters": {
+      "function": {
+        "paramName": "function",
+        "type": "select",
+        "encoding": "url",
+        "dynamicValues": true,
+        "commonValues": ["Production / Manufacturing", "Development", "Sales", "Quality", "Purchasing & Sourcing"]
+      },
+      "location": {
+        "paramName": "location",
+        "type": "select",
+        "encoding": "url",
+        "dynamicValues": true,
+        "commonValues": ["Austria", "India", "France", "Egypt", "Slovenia", "China"]
+      },
+      "division": {
+        "paramName": "division",
+        "type": "select",
+        "encoding": "url",
+        "dynamicValues": true
+      },
+      "datePosted": {
+        "paramName": "datePosted",
+        "type": "select",
+        "encoding": "url",
+        "dynamicValues": true
+      }
+    },
+    "pagination": {
+      "type": "pageNumber",
+      "paramName": "page",
+      "startIndex": 0,
+      "perPage": 10
+    },
+    "sorting": {
+      "enabled": true,
+      "paramName": "sort",
+      "orderParamName": "order",
+      "defaultSort": "asc",
+      "sortableFields": ["Job Title", "Business", "Site", "Date Posted"]
+    },
+    "resultsIndicator": "Showing X results",
+    "jobIdPattern": "req-[0-9]{8}",
+    "notes": "Uses Drupal Solr API search. Supports advanced filtering and sorting. SEO-friendly URLs."
+  },
+  "bayer": {
+    "name": "Bayer Careers",
+    "type": "eightfold_ai",
+    "enabled": true,
+    "urls": {
+      "base": "https://bayer.eightfold.ai/careers",
+      "search": "https://bayer.eightfold.ai/careers?query={keyword}",
+      "jobDetail": "https://bayer.eightfold.ai/careers/job/{jobId}"
+    },
+    "searchParameters": {
+      "keyword": {
+        "paramName": "query",
+        "type": "string",
+        "required": false,
+        "encoding": "url",
+        "caseSensitive": false
+      }
+    },
+    "filters": {
+      "location": {
+        "paramName": "location",
+        "type": "autocomplete",
+        "encoding": "url",
+        "dynamicValues": true,
+        "placeholder": "City, state, zip code or 'remote'",
+        "supportsRemote": true
+      }
+    },
+    "pagination": {
+      "type": "infinite_scroll",
+      "paramName": "offset",
+      "perPage": 10,
+      "note": "May use 'Show More Positions' button"
+    },
+    "sorting": {
+      "enabled": true,
+      "paramName": "sort",
+      "defaultSort": "relevance",
+      "options": ["relevance", "recent"]
+    },
+    "resultsIndicator": "X open jobs",
+    "features": {
+      "resumeMatching": true,
+      "advancedOptions": true
+    },
+    "notes": "Modern AI-powered ATS. Supports resume upload for job matching. Single Page Application with dynamic content loading."
+  },
+  "gsk": {
+    "name": "GSK Jobs",
+    "type": "phenom_people",
+    "enabled": true,
+    "urls": {
+      "base": "https://jobs.gsk.com/gb/en/search-results",
+      "search": "https://jobs.gsk.com/gb/en/search-results?keywords={keyword}",
+      "jobDetail": "https://jobs.gsk.com/gb/en/jobs/{jobId}"
+    },
+    "locale": {
+      "country": "gb",
+      "language": "en"
+    },
+    "searchParameters": {
+      "keyword": {
+        "paramName": "keywords",
+        "type": "string",
+        "required": false,
+        "encoding": "url",
+        "caseSensitive": false
+      }
+    },
+    "filters": {
+      "location": {
+        "paramName": "location",
+        "type": "autocomplete",
+        "encoding": "url",
+        "dynamicValues": true
+      },
+      "category": {
+        "paramName": "category",
+        "type": "multiselect",
+        "encoding": "url",
+        "values": {
+          "Sales": 182,
+          "Medical and Clinical": 121,
+          "Manufacturing": 48,
+          "Administrative Services": 45,
+          "Marketing": 45,
+          "Quality": 45,
+          "Engineering": 37,
+          "Science and Technology": 35,
+          "Supply Chain & Logistics": 18,
+          "Finance": 17,
+          "Regulatory": 14,
+          "Commercial Operations": 12
+        }
+      }
+    },
+    "sorting": {
+      "enabled": true,
+      "defaultSort": "relevance"
+    },
+    "features": {
+      "savedJobs": true,
+      "jobAlerts": true,
+      "multiLanguage": true
+    },
+    "notes": "Phenom People ATS integration. Multi-region support. Categories have predefined job counts."
+  }
+}

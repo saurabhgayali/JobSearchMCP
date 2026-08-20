@@ -1,0 +1,42 @@
+{
+  "name": "Novartis",
+  "career_url": "https://www.novartis.com/careers/career-search",
+  "search_url": "https://www.novartis.com/careers/career-search?search_api_fulltext={keyword}",
+  "params": [
+    {
+      "name": "search_api_fulltext",
+      "label": "Search",
+      "type": "text",
+      "required": false,
+      "values": []
+    },
+    {
+      "name": "function",
+      "label": "Function",
+      "type": "select",
+      "required": false,
+      "values": []
+    },
+    {
+      "name": "location",
+      "label": "Location",
+      "type": "select",
+      "required": false,
+      "values": []
+    },
+    {
+      "name": "division",
+      "label": "Division",
+      "type": "select",
+      "required": false,
+      "values": []
+    },
+    {
+      "name": "datePosted",
+      "label": "Date Posted",
+      "type": "select",
+      "required": false,
+      "values": []
+    }
+  ]
+}

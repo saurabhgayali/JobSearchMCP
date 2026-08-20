@@ -1,0 +1,26 @@
+{
+    "ProjectName": "JobSearchMCP",
+    "ProjectDescription": "Job Search",
+    "sites": [
+        {
+            "name": "Amgen",
+            "career_url": "https://amgen.wd1.myworkdayjobs.com/Careers?q=Engineer",
+        },
+        {
+            "namne": "Pfizer",
+            "career_url": "https://pfizer.wd1.myworkdayjobs.com/en-US/PfizerCareers?q=Engineer",
+        },
+        {
+            "name": "Novartis",
+            "career_url": "https://www.novartis.com/careers/career-search?search_api_fulltext=Engineer",
+        },
+        {
+            "name": "Bayer",
+            "career_url": "https://bayer.eightfold.ai/careers?query=engineer",
+        },
+        {
+            "name": "GSK",
+            "career_url": "https://jobs.gsk.com/gb/en/search-results?keywords=engineer",
+        }
+    ]
+}

@@ -1,0 +1,335 @@
+{
+  "sites": [
+    {
+      "company": "Amgen",
+      "platform": "Workday",
+      "career_base_url": "https://amgen.wd1.myworkdayjobs.com/Careers",
+      "search_url_template": "https://amgen.wd1.myworkdayjobs.com/Careers?q={keyword}",
+      "keyword_parameter": "q",
+      "keyword_encoding": "URL parameter (string)",
+      "test_results": {
+        "search_term": "Engineer",
+        "results_found": 751,
+        "url_example": "https://amgen.wd1.myworkdayjobs.com/Careers?q=Engineer"
+      },
+      "filters": [
+        {
+          "name": "Location",
+          "type": "select/autocomplete",
+          "parameter_name": "location",
+          "values": "Dynamic (autocomplete)",
+          "example_values": ["US - California - Thousand Oaks", "US - Massachusetts - Cambridge", "India - Hyderabad"]
+        },
+        {
+          "name": "Time Type",
+          "type": "select",
+          "parameter_name": "timeType",
+          "values": "Not fully enumerated - includes Full-time, Part-time, Temporary, etc.",
+          "visible_in_ui": true
+        },
+        {
+          "name": "Country/Territory",
+          "type": "select",
+          "parameter_name": "country",
+          "values": "Not fully enumerated - Dynamic list",
+          "visible_in_ui": true
+        },
+        {
+          "name": "Additional Filters",
+          "type": "More options button",
+          "parameter_name": "unknown",
+          "note": "Click 'More' button to access additional filter options"
+        }
+      ],
+      "pagination": {
+        "type": "Page-based",
+        "parameter": "Not shown in base search results"
+      },
+      "sorting": {
+        "supported": true,
+        "parameters": "Unknown - likely sortOrder, sortDirection"
+      },
+      "url_pattern_notes": "Simple query parameter structure. Filters applied as additional parameters.",
+      "additional_observations": [
+        "Results page shows 10 jobs per page (estimated)",
+        "Job ID suffix format: R-XXXXXX",
+        "Supports direct job URL access: /en-US/Careers/job/location/title_R-XXXXXX?q=Engineer",
+        "Workday integration - standard interface across Amgen"
+      ]
+    },
+    {
+      "company": "Pfizer",
+      "platform": "Workday",
+      "career_base_url": "https://pfizer.wd1.myworkdayjobs.com/en-US/PfizerCareers",
+      "search_url_template": "https://pfizer.wd1.myworkdayjobs.com/en-US/PfizerCareers?q={keyword}",
+      "keyword_parameter": "q",
+      "keyword_encoding": "URL parameter (string)",
+      "test_results": {
+        "search_term": "Engineer",
+        "results_found": 113,
+        "url_example": "https://pfizer.wd1.myworkdayjobs.com/en-US/PfizerCareers?q=Engineer"
+      },
+      "filters": [
+        {
+          "name": "Location",
+          "type": "select/autocomplete",
+          "parameter_name": "location",
+          "values": "Dynamic (autocomplete)",
+          "example_values": ["Singapore - Tuas", "Greece-Thessaloniki Chortiatis", "United States - Massachusetts - Andover"]
+        },
+        {
+          "name": "Time Type",
+          "type": "select",
+          "parameter_name": "timeType",
+          "values": "Full-time, Part-time, Contract, etc.",
+          "visible_in_ui": true
+        },
+        {
+          "name": "Posting Date",
+          "type": "select",
+          "parameter_name": "postingDate",
+          "values": "Last 7 days, Last 30 days, Last 90 days, etc.",
+          "visible_in_ui": true
+        },
+        {
+          "name": "Additional Filters",
+          "type": "More options button",
+          "parameter_name": "unknown",
+          "note": "Click 'More' button to access additional filter options"
+        }
+      ],
+      "pagination": {
+        "type": "Page-based",
+        "parameter": "Not shown in search results"
+      },
+      "sorting": {
+        "supported": true,
+        "parameters": "Unknown - likely sortOrder, sortDirection"
+      },
+      "url_pattern_notes": "Includes locale in URL path (en-US). Similar Workday structure to Amgen.",
+      "additional_observations": [
+        "6 results per page visible",
+        "Job ID format: Numeric (e.g., 4960891, 4951637)",
+        "Direct job URLs: /en-US/PfizerCareers/job/location/title_XXXXXX?q=Engineer",
+        "Supports multiple locations per job",
+        "Career URL includes 'PfizerCareers' (branded)"
+      ]
+    },
+    {
+      "company": "Novartis",
+      "platform": "Custom (Drupal-based)",
+      "career_base_url": "https://www.novartis.com/careers/career-search",
+      "search_url_template": "https://www.novartis.com/careers/career-search?search_api_fulltext={keyword}",
+      "keyword_parameter": "search_api_fulltext",
+      "keyword_encoding": "URL parameter (string)",
+      "test_results": {
+        "search_term": "Engineer",
+        "results_found": 221,
+        "total_available": 1139,
+        "url_example": "https://www.novartis.com/careers/career-search?search_api_fulltext=Engineer"
+      },
+      "filters": [
+        {
+          "name": "Function",
+          "type": "select/dropdown",
+          "parameter_name": "function",
+          "values": "Dynamic list",
+          "example_values": ["Production / Manufacturing", "Development", "Sales", "Quality", "Purchasing & Sourcing", "Human Resources"]
+        },
+        {
+          "name": "Location",
+          "type": "select/dropdown",
+          "parameter_name": "location",
+          "values": "Dynamic list",
+          "example_values": ["Austria", "India", "France", "Egypt", "Slovenia", "China"]
+        },
+        {
+          "name": "Division",
+          "type": "select/dropdown",
+          "parameter_name": "division",
+          "values": "Dynamic list"
+        },
+        {
+          "name": "Date Posted",
+          "type": "select/dropdown",
+          "parameter_name": "datePosted",
+          "values": "Unknown - appears to be date range selector"
+        }
+      ],
+      "pagination": {
+        "type": "Page-based",
+        "parameter": "page",
+        "format": "?search_api_fulltext=Engineer&page=0",
+        "example_urls": [
+          "?search_api_fulltext=Engineer&page=1",
+          "?search_api_fulltext=Engineer&page=2"
+        ]
+      },
+      "sorting": {
+        "supported": true,
+        "parameters": "sort=asc&order=ColumnName",
+        "example_values": [
+          "sort=asc&order=Job%20Title",
+          "sort=asc&order=Business",
+          "sort=asc&order=Site",
+          "sort=asc&order=Date%20Posted"
+        ]
+      },
+      "url_pattern_notes": "Drupal-based search API. Uses Solr-style search parameter. SEO-friendly URLs for job detail pages.",
+      "additional_observations": [
+        "Results displayed in table format (10 results per page)",
+        "Job detail URLs: /careers/career-search/job/details/req-XXXXXXX-job-title",
+        "Request ID format: req-XXXXXXX",
+        "Supports combining filters and keywords in single URL",
+        "Pagination links include all current parameters",
+        "Global careers site with multi-country support"
+      ]
+    },
+    {
+      "company": "Bayer",
+      "platform": "Eightfold AI",
+      "career_base_url": "https://bayer.eightfold.ai/careers",
+      "search_url_template": "https://bayer.eightfold.ai/careers?query={keyword}",
+      "keyword_parameter": "query",
+      "keyword_encoding": "URL parameter (string, lowercase)",
+      "test_results": {
+        "search_term": "engineer",
+        "results_found": 76,
+        "total_available": 601,
+        "url_example": "https://bayer.eightfold.ai/careers?query=engineer"
+      },
+      "filters": [
+        {
+          "name": "Location",
+          "type": "autocomplete field",
+          "parameter_name": "location",
+          "values": "Dynamic autocomplete",
+          "placeholder": "City, state, zip code or 'remote'",
+          "example_values": ["Indianola, Pennsylvania", "Luling, Louisiana", "Fort Wayne, Indiana"]
+        },
+        {
+          "name": "Advanced Options",
+          "type": "Expandable filter section",
+          "parameter_name": "unknown - likely multiple params",
+          "note": "Click 'Advanced Options' button to reveal additional filter options"
+        }
+      ],
+      "pagination": {
+        "type": "Infinite scroll / Load more button",
+        "parameter": "Unknown - may use offset parameter"
+      },
+      "sorting": {
+        "supported": true,
+        "default": "Relevance",
+        "options": ["Relevance", "Date Posted", "Unknown others"],
+        "parameter": "sort"
+      },
+      "url_pattern_notes": "Modern SPA (Single Page Application) - parameters may be stored in state. Eightfold AI recruitment platform.",
+      "additional_observations": [
+        "Supports resume upload for job matching",
+        "Results show job category (e.g., Engineering & Technology, Information Technology, Supply Chain Management)",
+        "Uses headless UI/Vue.js - dynamic rendering",
+        "Search is case-insensitive (tested with 'engineer' and 'Engineer')",
+        "Shows matched job counts with resume features",
+        "No clear pagination in traditional sense - may use infinite scroll"
+      ]
+    },
+    {
+      "company": "GSK (GlaxoSmithKline)",
+      "platform": "Phenom People",
+      "career_base_url": "https://jobs.gsk.com/gb/en/search-results",
+      "search_url_template": "https://jobs.gsk.com/gb/en/search-results?keywords={keyword}",
+      "keyword_parameter": "keywords",
+      "keyword_encoding": "URL parameter (string)",
+      "test_results": {
+        "search_term": "engineer",
+        "results_found": "Not explicitly shown",
+        "url_example": "https://jobs.gsk.com/gb/en/search-results?keywords=engineer"
+      },
+      "filters": [
+        {
+          "name": "Search Job Title",
+          "type": "autocomplete text field",
+          "parameter_name": "keywords",
+          "values": "Free text search"
+        },
+        {
+          "name": "Location",
+          "type": "autocomplete text field",
+          "parameter_name": "location",
+          "values": "Dynamic autocomplete",
+          "placeholder": "City, state, country"
+        },
+        {
+          "name": "Categories",
+          "type": "checkbox/select",
+          "parameter_name": "category",
+          "values": [
+            "Sales (182)",
+            "Medical and Clinical (121)",
+            "Manufacturing (48)",
+            "Administrative Services (45)",
+            "Marketing (45)",
+            "Quality (45)",
+            "Engineering (37)",
+            "Science and Technology (35)",
+            "Supply Chain & Logistics (18)",
+            "Finance (17)",
+            "Regulatory (14)",
+            "Commercial Operations (12)"
+          ],
+          "visible_in_ui": true
+        }
+      ],
+      "pagination": {
+        "type": "Not fully visible in base page",
+        "parameter": "Unknown"
+      },
+      "sorting": {
+        "supported": true,
+        "default": "Relevance"
+      },
+      "url_pattern_notes": "Phenom People ATS integration. Multi-region support (gb/en for UK-English).",
+      "additional_observations": [
+        "Base page has job categories with counts",
+        "Engineering category shows 37 open positions",
+        "Supports saved jobs feature",
+        "Language/region selector available",
+        "Form-based search interface",
+        "All current jobs displayed on single portal"
+      ]
+    }
+  ],
+  "comparison_summary": {
+    "keyword_parameters": {
+      "Amgen": "q",
+      "Pfizer": "q",
+      "Novartis": "search_api_fulltext",
+      "Bayer": "query",
+      "GSK": "keywords"
+    },
+    "platforms": {
+      "Workday": ["Amgen", "Pfizer"],
+      "Custom_Drupal": ["Novartis"],
+      "Eightfold_AI": ["Bayer"],
+      "Phenom_People": ["GSK"]
+    },
+    "common_filters": {
+      "All sites": ["Keyword search", "Location"],
+      "Most sites": ["Job category/Function", "Date posted"],
+      "Some sites": ["Time type", "Advanced options", "Sorting"]
+    },
+    "pagination_types": {
+      "Page_based": ["Amgen", "Pfizer", "Novartis"],
+      "Infinite_scroll_or_dynamic": ["Bayer"],
+      "Unknown": ["GSK"]
+    }
+  },
+  "configuration_notes": {
+    "url_construction": "Most sites use GET parameters in URL. Novartis uses &page=X for pagination. Most support combining parameters with & separator.",
+    "encoding": "All sites use standard URL encoding. Keywords appear to be case-insensitive for most platforms.",
+    "location_handling": "Varies - Amgen/Pfizer use hierarchical (Country - State - City), Novartis uses country names, Bayer/GSK use free-form autocomplete",
+    "job_identifiers": "Workday sites use R-XXXXXX format. Novartis uses req-XXXXXXX. Bayer/GSK use internal ID systems.",
+    "filter_discoverability": "All sites expose filters through UI buttons/dropdowns. Some have 'More' or 'Advanced Options' for additional parameters."
+  }
+}
