@@ -2,6 +2,12 @@
   "framework": "nextjs",
   "buildCommand": "cd vercel && npm run build",
   "devCommand": "cd vercel && npm run dev",
-  "installCommand": "npm install && cd vercel && npm install"
+  "installCommand": "npm install && cd vercel && npm install",
+  "builds": [
+    {
+      "src": "vercel/package.json",
+      "use": "@vercel/next"
+    }
+  ]
 }
 
