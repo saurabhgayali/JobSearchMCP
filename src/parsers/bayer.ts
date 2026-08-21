@@ -21,7 +21,7 @@ export class BayerParser implements Parser {
     });
   }
 
-  parse(html: string, searchUrl: string): SearchResult[] {
+  parse(html: string, _searchUrl: string): SearchResult[] {
     return this.helper.parse(html);
   }
 }
