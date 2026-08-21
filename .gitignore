@@ -20,8 +20,8 @@ yarn-error.log*
 reports/
 test/*.csv
 
-# Exception: Allow server.js entrypoint for Vercel
-!vercel/server.js
+# Exception: Allow Next.js entrypoint files for Vercel
+!vercel/index.js
 
 # Vercel Demo App Build Outputs
 vercel/node_modules/
