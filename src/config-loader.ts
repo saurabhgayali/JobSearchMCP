@@ -7,14 +7,22 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
+import { fileURLToPath } from 'url';
 import { CompanyConfig, SearchParameter } from './types.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export class ConfigLoader {
   private sites: Map<string, CompanyConfig> = new Map();
   private sitesDir: string;
 
   constructor(sitesDir: string = 'sites') {
-    this.sitesDir = sitesDir;
+    // Resolve sitesDir relative to project root
+    // From dist/src/config-loader.js -> need to go up 2 levels to reach project root
+    this.sitesDir = path.isAbsolute(sitesDir) 
+      ? sitesDir 
+      : path.join(__dirname, '..', '..', sitesDir);
     this.loadAllSites();
   }
 
