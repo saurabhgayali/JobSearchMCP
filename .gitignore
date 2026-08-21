@@ -26,3 +26,4 @@ vercel/.next/
 vercel/out/
 vercel/.env.local
 
+deploylog.txt
