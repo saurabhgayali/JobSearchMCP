@@ -1,5 +1,3 @@
-import { SearchExecutor } from '@/dist/src/search-executor.js';
-import { ExtractorRegistry } from '@/dist/src/extractors/index.js';
 import { NextRequest, NextResponse } from 'next/server';
 
 // Rate limiting configuration
@@ -32,14 +30,6 @@ interface SearchResponse {
     attemptedAt: string;
   }>;
 }
-
-const SEARCH_URLS: { [key: string]: string } = {
-  amgen: 'https://amgen.wd1.myworkdayjobs.com/Careers?q={query}',
-  bayer: 'https://bayer.eightfold.ai/careers?query={query}',
-  gsk: 'https://jobs.gsk.com/gb/en/search-results?keywords={query}',
-  novartis: 'https://www.novartis.com/careers/career-search?search_api_fulltext={query}',
-  pfizer: 'https://pfizer.wd1.myworkdayjobs.com/en-US/PfizerCareers?q={query}',
-};
 
 export async function POST(request: NextRequest): Promise<NextResponse<SearchResponse | { error: string }>> {
   try {
@@ -79,72 +69,21 @@ export async function POST(request: NextRequest): Promise<NextResponse<SearchRes
       return NextResponse.json({ error: 'Invalid request parameters' }, { status: 400 });
     }
 
-    const searchExecutor = new SearchExecutor();
-    const extractorRegistry = new ExtractorRegistry();
-
-    const jobs: SearchResponse['jobs'] = [];
-    const errors: SearchResponse['errors'] = [];
-    let jobCounter = 1;
-    let errorCounter = 1;
-
-    // Search each company
-    for (const company of companies) {
-      if (!SEARCH_URLS[company]) continue;
-
-      const searchUrl = SEARCH_URLS[company].replace('{query}', encodeURIComponent(query));
-
-      try {
-        const searchResult = await searchExecutor.search(company, searchUrl);
-
-        if (!searchResult.success || !searchResult.results) continue;
-
-        // Extract details from first 5 results
-        const extractor = extractorRegistry.getExtractor(company);
-        if (!extractor) continue;
-
-        for (let i = 0; i < Math.min(5, searchResult.results.length); i++) {
-          const jobUrl = searchResult.results[i].url;
-
-          try {
-            const extractionResult = await extractor.extract(jobUrl);
-
-            if (extractionResult.success && extractionResult.data) {
-              jobs.push({
-                sno: jobCounter++,
-                company,
-                jobTitle: extractionResult.data.jobTitle,
-                description: extractionResult.data.jobDescription.substring(0, 200),
-                url: jobUrl,
-                expiryDate: extractionResult.data.expiryDate,
-                applyLink: extractionResult.data.applyLink,
-              });
-            } else {
-              errors.push({
-                sno: errorCounter++,
-                company,
-                url: jobUrl,
-                errorCode: extractionResult.errorCode || 'UNKNOWN',
-                httpStatus: String(extractionResult.httpStatus || 'N/A'),
-                errorMessage: extractionResult.error || 'Unknown error',
-                attemptedAt: new Date().toISOString(),
-              });
-            }
-          } catch (error) {
-            errors.push({
-              sno: errorCounter++,
-              company,
-              url: jobUrl,
-              errorCode: 'EXCEPTION',
-              httpStatus: 'N/A',
-              errorMessage: error instanceof Error ? error.message : 'Unknown error',
-              attemptedAt: new Date().toISOString(),
-            });
-          }
-        }
-      } catch (error) {
-        console.error(`Search error for ${company}:`, error);
+    // Demo response - in production, this would call the MCP server
+    // The API depends on root MCP server which isn't available in serverless context
+    const jobs: SearchResponse['jobs'] = [
+      {
+        sno: 1,
+        company: companies[0] || 'example',
+        jobTitle: `${query} - Senior Role`,
+        description: 'This is a demo job listing. To use real job data, run the MCP server locally and connect to it.',
+        url: 'https://jobsearch-mcp.vercel.app/demo',
+        expiryDate: new Date(Date.now() + 30*24*60*60*1000).toISOString().split('T')[0],
+        applyLink: 'https://jobsearch-mcp.vercel.app/demo',
       }
-    }
+    ];
+    
+    const errors: SearchResponse['errors'] = [];
 
     return NextResponse.json({ jobs, errors });
   } catch (error) {
