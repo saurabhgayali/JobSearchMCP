@@ -4,6 +4,7 @@
   "description": "Next.js Demo App for Job Search MCP - Deployed to Vercel",
   "type": "module",
   "scripts": {
+    "prebuild": "cd .. && npm run build",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
