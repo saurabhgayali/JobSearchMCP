@@ -32,9 +32,16 @@
         }
 
         .sidebar-logo {
-            padding: 0 20px 30px;
+            padding: 0 20px 5px;
             font-size: 1.3rem;
             font-weight: 700;
+            margin-bottom: 0;
+        }
+
+        .sidebar-subtitle {
+            padding: 0 20px 30px;
+            font-size: 0.85rem;
+            color: #95a5a6;
             border-bottom: 1px solid #34495e;
             margin-bottom: 20px;
         }
@@ -224,6 +231,55 @@
             display: flex;
         }
 
+        footer {
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 2px solid #bdc3c7;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9rem;
+        }
+
+        .sidebar-buttons {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: auto;
+            border-top: 1px solid #34495e;
+            padding-top: 20px;
+        }
+
+        .sidebar-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: #34495e;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            font-size: 1.5rem;
+        }
+
+        .sidebar-btn:hover {
+            background: #3498db;
+            border-color: #ecf0f1;
+            transform: scale(1.1);
+        }
+
+        .sidebar-copyright {
+            padding: 0 20px;
+            font-size: 0.7rem;
+            color: #95a5a6;
+            text-align: center;
+            margin-top: 20px;
+            line-height: 1.4;
+        }
+
         @media (max-width: 768px) {
             .sidebar {
                 width: 100%;
@@ -242,12 +298,19 @@
             h2 {
                 font-size: 1.3rem;
             }
+
+            .sidebar-buttons {
+                flex-direction: row;
+                justify-content: center;
+                gap: 15px;
+            }
         }
     </style>
 </head>
 <body>
     <nav class="sidebar">
-        <div class="sidebar-logo">📚 Docs</div>
+        <div class="sidebar-logo">JobSearchMCP</div>
+        <div class="sidebar-subtitle">Documentation</div>
         
         <div class="section-title">Getting Started</div>
         <a href="#setup" class="nav-link">Setup Guide</a>
@@ -261,6 +324,14 @@
         <div class="section-title">Architecture</div>
         <a href="#ai-clarification" class="nav-link">AI Architecture</a>
         <a href="#summary" class="nav-link">v0.1 Summary</a>
+
+        <div class="sidebar-buttons">
+            <a href="../index.html" class="sidebar-btn" title="Home">🏠</a>
+            <a href="https://github.com/saurabhgayali/JobSearchMCP" target="_blank" class="sidebar-btn" title="GitHub Repo">🐙</a>
+            <a href="https://jobsearch-mcp.vercel.app/demo" target="_blank" class="sidebar-btn" title="Demo Site">🚀</a>
+        </div>
+
+        <div class="sidebar-copyright">&copy; 2026 JobSearchMCP</div>
     </nav>
 
     <main>
@@ -559,7 +630,13 @@ GSK,https://...,TIMEOUT,,Request timeout</code></pre>
 const data = await response.json();
 console.log(data.jobs);
 console.log(data.errors);</code></pre>
-        </section>
+
+            <h2>Production API Endpoint (Vercel)</h2>
+            <p>When deployed to Vercel, the API is available at:</p>
+            <pre><code>https://jobsearch-mcp.vercel.app/api/search-jobs</code></pre>
+            
+            <p>Use the relative path <code>/api/search-jobs</code> in the demo app, or the full URL for external integrations.</p>
+
 
         <!-- Deployment Section -->
         <section id="deployment" class="section">

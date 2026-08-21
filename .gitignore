@@ -19,3 +19,10 @@ yarn-debug.log*
 yarn-error.log*
 reports/
 test/*.csv
+
+# Vercel Demo App Build Outputs
+vercel/node_modules/
+vercel/.next/
+vercel/out/
+vercel/.env.local
+
