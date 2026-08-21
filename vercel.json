@@ -1,6 +1,5 @@
 {
   "framework": "nextjs",
-  "rootDirectory": "vercel",
   "buildCommand": "cd vercel && npm run build",
   "devCommand": "cd vercel && npm run dev",
   "installCommand": "npm install && cd vercel && npm install"
