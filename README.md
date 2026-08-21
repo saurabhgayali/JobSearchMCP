@@ -23,7 +23,7 @@ Allows AI assistants (Claude, ChatGPT) to search and extract job listings from *
 ## Technology Stack
 
 - **Protocol:** Model Context Protocol (MCP) SDK (TypeScript)
-- **Runtime:** Node.js v18+ (LTS recommended: v18, v20, v22)
+- **Runtime:** Node.js v24.19+ (LTS)
 - **Language:** TypeScript 5.3+ (strict mode)
 - **Parsing:** Regex-based HTML extraction (no Puppeteer, jsdom, or Cheerio)
 - **Build:** TypeScript Compiler (tsc)

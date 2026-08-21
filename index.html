@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Job Search MCP - Configuration-Driven Job Search</title>
+    <title>Job Search MCP - AI-Powered & Manual Job Discovery</title>
     <style>
         * {
             margin: 0;
@@ -14,143 +14,247 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            color: #2c3e50;
+            background: #f5f6f7;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 40px 20px;
+            padding: 0 20px;
         }
 
+        /* Header */
         header {
-            text-align: center;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
             color: white;
-            margin-bottom: 60px;
+            padding: 80px 20px;
+            text-align: center;
         }
 
         header h1 {
             font-size: 3.5rem;
-            margin-bottom: 10px;
-            font-weight: 800;
-        }
-
-        header p {
-            font-size: 1.3rem;
-            opacity: 0.95;
-            margin-bottom: 5px;
-        }
-
-        .subtitle {
-            font-size: 1rem;
-            opacity: 0.85;
-            margin-top: 15px;
-        }
-
-        .content {
-            background: white;
-            border-radius: 15px;
-            padding: 50px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            margin-bottom: 40px;
-        }
-
-        .section {
-            margin-bottom: 40px;
-        }
-
-        .section h2 {
-            color: #667eea;
-            font-size: 2rem;
-            margin-bottom: 20px;
-            border-bottom: 3px solid #764ba2;
-            padding-bottom: 10px;
-        }
-
-        .section h3 {
-            color: #764ba2;
-            font-size: 1.3rem;
-            margin-top: 25px;
             margin-bottom: 15px;
+            font-weight: 700;
+            letter-spacing: -1px;
         }
 
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 20px;
+        header .tagline {
+            font-size: 1.4rem;
+            opacity: 0.95;
+            margin-bottom: 10px;
+            font-weight: 300;
         }
 
-        .feature {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 8px;
-            border-left: 4px solid #667eea;
+        header .subtitle {
+            font-size: 1.05rem;
+            opacity: 0.85;
+            max-width: 700px;
+            margin: 15px auto 0;
         }
 
-        .feature strong {
-            color: #667eea;
-            display: block;
-            margin-bottom: 8px;
+        /* Navigation */
+        nav {
+            background: white;
+            border-bottom: 1px solid #e0e4e8;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
 
-        .feature p {
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+        }
+
+        nav a {
+            color: #2c3e50;
+            text-decoration: none;
+            margin: 0 20px;
             font-size: 0.95rem;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
             color: #555;
         }
 
-        code {
-            background: #f1f3f5;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-family: 'Monaco', 'Courier New', monospace;
-            color: #e83e8c;
+        nav a.active {
+            color: #555;
+            border-bottom: 2px solid #555;
+            padding-bottom: 2px;
         }
 
-        .command {
-            background: #2d3748;
-            color: #a0aec0;
-            padding: 15px;
+        /* Main Content */
+        .content-section {
+            background: white;
+            margin: 40px auto;
             border-radius: 8px;
-            overflow-x: auto;
-            margin: 15px 0;
-            font-family: 'Monaco', 'Courier New', monospace;
-            font-size: 0.9rem;
+            overflow: hidden;
+            box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
         }
 
-        .command span {
-            color: #68d391;
+        .section-header {
+            background: #ecf0f1;
+            padding: 30px;
+            border-bottom: 1px solid #d5dbde;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
+        .section-header h2 {
+            color: #2c3e50;
+            font-size: 2rem;
+            margin: 0;
         }
 
-        th, td {
-            text-align: left;
-            padding: 12px;
-            border-bottom: 1px solid #e2e8f0;
+        .section-header p {
+            color: #666;
+            margin-top: 8px;
+            font-size: 1.05rem;
         }
 
-        th {
-            background: #f7fafc;
-            color: #667eea;
+        .section-body {
+            padding: 40px 30px;
+        }
+
+        /* Use Cases Grid */
+        .use-cases {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .use-case {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 6px;
+            border-left: 4px solid #555;
+            transition: all 0.3s ease;
+        }
+
+        .use-case:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .use-case h3 {
+            color: #2c3e50;
+            margin-bottom: 12px;
+            font-size: 1.15rem;
             font-weight: 600;
         }
 
-        tr:hover {
-            background: #f7fafc;
+        .use-case p {
+            color: #555;
+            font-size: 0.95rem;
+            line-height: 1.6;
         }
 
-        .links {
+        .use-case .example {
+            background: white;
+            padding: 12px;
+            margin-top: 12px;
+            border-radius: 4px;
+            font-style: italic;
+            color: #666;
+            font-size: 0.9rem;
+            border-left: 2px solid #999;
+        }
+
+        /* Features Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+        }
+
+        .comparison-table th {
+            background: #ecf0f1;
+            color: #2c3e50;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid #bdc3c7;
+        }
+
+        .comparison-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e0e4e8;
+        }
+
+        .comparison-table tr:hover {
+            background: #fafbfc;
+        }
+
+        .check {
+            color: #27ae60;
+            font-weight: 600;
+        }
+
+        /* Code Blocks */
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .code-block .keyword {
+            color: #3498db;
+        }
+
+        .code-block .string {
+            color: #2ecc71;
+        }
+
+        .code-block .comment {
+            color: #95a5a6;
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            background: #34495e;
+            padding: 30px;
+            border-radius: 6px;
+            margin: 30px 0;
+            color: white;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* Buttons */
+        .btn-group {
             display: flex;
             gap: 15px;
             margin: 30px 0;
             flex-wrap: wrap;
+            justify-content: center;
         }
 
         .btn {
@@ -161,346 +265,510 @@
             font-weight: 600;
             transition: all 0.3s ease;
             border: 2px solid;
+            font-size: 0.95rem;
+            cursor: pointer;
+            text-align: center;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #2c3e50;
             color: white;
-            border-color: #667eea;
+            border-color: #2c3e50;
         }
 
         .btn-primary:hover {
+            background: #34495e;
+            border-color: #34495e;
             transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
         }
 
         .btn-secondary {
             background: white;
-            color: #667eea;
-            border-color: #667eea;
+            color: #2c3e50;
+            border-color: #bdc3c7;
         }
 
         .btn-secondary:hover {
-            background: #f7fafc;
-            transform: translateY(-2px);
+            background: #ecf0f1;
+            border-color: #2c3e50;
         }
 
-        .companies {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
+        .btn-outline {
+            background: transparent;
+            color: #2c3e50;
+            border-color: #2c3e50;
+        }
+
+        .btn-outline:hover {
+            background: #2c3e50;
+            color: white;
+        }
+
+        /* Lists */
+        ul, ol {
             margin: 20px 0;
+            padding-left: 30px;
         }
 
-        .company-badge {
-            background: #edf2f7;
-            color: #667eea;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            border: 1px solid #cbd5e0;
+        li {
+            margin: 8px 0;
+            color: #555;
         }
 
-        .highlight {
-            background: #fef5e7;
-            border-left: 4px solid #f39c12;
-            padding: 15px;
+        /* Callout Boxes */
+        .callout {
+            background: #ecf0f1;
+            border-left: 4px solid #555;
+            padding: 20px;
             border-radius: 4px;
             margin: 20px 0;
         }
 
+        .callout strong {
+            color: #2c3e50;
+        }
+
+        .callout-info {
+            border-left-color: #3498db;
+            background: #ebf5fb;
+        }
+
+        .callout-success {
+            border-left-color: #27ae60;
+            background: #eafaf1;
+        }
+
+        .callout-warning {
+            border-left-color: #e67e22;
+            background: #fef5e7;
+        }
+
+        /* Footer */
         footer {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 40px 20px;
             text-align: center;
-            color: rgba(255, 255, 255, 0.8);
             margin-top: 60px;
-            padding-top: 30px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin: 30px 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 30px;
-            border-radius: 10px;
-            color: white;
+        footer p {
+            margin: 8px 0;
+            font-size: 0.9rem;
         }
 
-        .stat {
-            text-align: center;
+        footer a {
+            color: #ecf0f1;
+            text-decoration: none;
+            border-bottom: 1px solid #555;
         }
 
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: 800;
-            display: block;
-            margin-bottom: 5px;
+        footer a:hover {
+            border-bottom-color: #ecf0f1;
         }
 
-        .stat-label {
-            font-size: 0.95rem;
-            opacity: 0.9;
-        }
-
+        /* Responsive */
         @media (max-width: 768px) {
             header h1 {
-                font-size: 2.5rem;
+                font-size: 2.2rem;
             }
 
-            .content {
-                padding: 30px 20px;
-            }
-
-            header p {
+            header .tagline {
                 font-size: 1.1rem;
+            }
+
+            .section-body {
+                padding: 20px;
+            }
+
+            nav .container {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            nav a {
+                margin: 5px 10px;
+            }
+
+            .btn-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>🔍 Job Search MCP</h1>
-            <p>Configuration-Driven Job Search for AI Assistants</p>
-            <p class="subtitle">Enable Claude, ChatGPT & other AI tools to search jobs across 5+ career sites</p>
-        </header>
+    <nav>
+        <div class="container">
+            <div style="font-weight: 700; color: #2c3e50; font-size: 1.2rem;">Job Search MCP</div>
+            <div>
+                <a href="#overview" class="nav-link">Overview</a>
+                <a href="#usage" class="nav-link">Usage</a>
+                <a href="#how-it-works" class="nav-link">How It Works</a>
+                <a href="./docs-html/index.html" class="nav-link">Documentation</a>
+            </div>
+        </div>
+    </nav>
 
-        <div class="stats">
-            <div class="stat">
-                <span class="stat-number">5+</span>
-                <span class="stat-label">Current Companies</span>
+    <header>
+        <div class="container">
+            <h1>Job Search MCP</h1>
+            <p class="tagline">AI-Powered Job Discovery Platform</p>
+            <p class="subtitle">
+                Use with Claude, ChatGPT & AI assistants. Or search manually with our web demo. 
+                5+ companies, infinitely expandable.
+            </p>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Overview Section -->
+        <div class="content-section" id="overview">
+            <div class="section-header">
+                <h2>What You Can Do</h2>
+                <p>Two ways to search for jobs: Let AI find them, or search yourself</p>
             </div>
-            <div class="stat">
-                <span class="stat-number">∞</span>
-                <span class="stat-label">Expandable</span>
-            </div>
-            <div class="stat">
-                <span class="stat-number">100%</span>
-                <span class="stat-label">MCP Compatible</span>
-            </div>
-            <div class="stat">
-                <span class="stat-number">0</span>
-                <span class="stat-label">External Dependencies</span>
+            <div class="section-body">
+                <div class="use-cases">
+                    <!-- AI Use Case -->
+                    <div class="use-case">
+                        <h3>🤖 With AI Assistants</h3>
+                        <p>Let Claude or ChatGPT search jobs across pharma companies in seconds.</p>
+                        <div class="example">
+                            User: "Find senior manager roles at Pfizer and Novartis"<br>
+                            Claude: "I found 8 positions with salary ranges..."
+                        </div>
+                    </div>
+
+                    <!-- Manual Use Case -->
+                    <div class="use-case">
+                        <h3>🔍 Manual Job Search</h3>
+                        <p>Use our web interface to browse jobs, filter by company, and download results as CSV.</p>
+                        <div class="example">
+                            Search "Manager" → See 50+ results across 5 companies → Download CSV with details
+                        </div>
+                    </div>
+
+                    <!-- Developer Use Case -->
+                    <div class="use-case">
+                        <h3>⚙️ For Developers</h3>
+                        <p>REST API for custom integrations. Configuration-driven architecture for adding companies.</p>
+                        <div class="example">
+                            POST /api/search-jobs with query & company list → JSON response with job details
+                        </div>
+                    </div>
+
+                    <!-- Recruitment Use Case -->
+                    <div class="use-case">
+                        <h3>💼 HR & Recruitment</h3>
+                        <p>Aggregate job listings from multiple career sites for candidate matching and talent analysis.</p>
+                        <div class="example">
+                            Search for "Data Scientist" roles → Generate reports with salary, requirements, apply links
+                        </div>
+                    </div>
+
+                    <!-- Job Seeker Use Case -->
+                    <div class="use-case">
+                        <h3>👤 Job Seekers</h3>
+                        <p>Search across 5 major pharma companies simultaneously. No need to visit each career site individually.</p>
+                        <div class="example">
+                            One search → Amgen, Bayer, GSK, Novartis, Pfizer → All results in one place
+                        </div>
+                    </div>
+
+                    <!-- AI Integration Use Case -->
+                    <div class="use-case">
+                        <h3>🧠 AI Workflow Builder</h3>
+                        <p>Build autonomous AI agents that monitor job markets, generate reports, or notify on new listings.</p>
+                        <div class="example">
+                            AI agent → Daily job search → Filter by role + salary → Email digest to hiring team
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats-bar">
+                    <div class="stat-item">
+                        <span class="stat-number">5+</span>
+                        <span class="stat-label">Supported Companies</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">∞</span>
+                        <span class="stat-label">Expandable Via Config</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">2</span>
+                        <span class="stat-label">Usage Modes (AI + Manual)</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">0</span>
+                        <span class="stat-label">Heavy Dependencies</span>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="content">
-            <div class="section">
-                <h2>What is Job Search MCP?</h2>
-                <p>
-                    A Model Context Protocol (MCP) server that enables AI assistants to search and extract job listings from company career websites. 
-                    Unlike traditional web scrapers, this is a <strong>configuration-driven</strong> system where new companies can be added 
-                    without modifying code.
-                </p>
-                <p style="margin-top: 15px;">
-                    <strong>Current Coverage:</strong>
-                </p>
-                <div class="companies">
-                    <span class="company-badge">Amgen (Workday)</span>
-                    <span class="company-badge">Bayer (Eightfold AI)</span>
-                    <span class="company-badge">GSK (Workday)</span>
-                    <span class="company-badge">Novartis (Drupal)</span>
-                    <span class="company-badge">Pfizer (Workday)</span>
+        <!-- Usage Section -->
+        <div class="content-section" id="usage">
+            <div class="section-header">
+                <h2>Getting Started</h2>
+                <p>Choose your path: AI integration or manual search</p>
+            </div>
+            <div class="section-body">
+                <h3>For AI Integration (Claude Desktop)</h3>
+                <ol>
+                    <li>Clone the repository: <code>git clone https://github.com/saurabhgayali/JobSearchMCP.git</code></li>
+                    <li>Install dependencies: <code>npm install && npm run build</code></li>
+                    <li>Edit <code>~/.claude/claude_desktop_config.json</code>:</li>
+                </ol>
+                <div class="code-block">
+{<br>
+&nbsp;&nbsp;<span class="string">"mcpServers"</span>: {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="string">"job-search"</span>: {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="string">"command"</span>: <span class="string">"node"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="string">"args"</span>: [<span class="string">"path/to/dist/server.js"</span>]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;}<br>
+}
+                </div>
+                <li>Restart Claude Desktop and ask: <em>"Find manager jobs at Amgen"</em></li>
+
+                <h3 style="margin-top: 30px;">For Manual Web Search</h3>
+                <ol>
+                    <li>Deploy to Vercel: <code>vercel deploy</code></li>
+                    <li>Visit: <code>https://your-app.vercel.app/</code></li>
+                    <li>Enter search term, select companies, browse results</li>
+                    <li>Download as CSV</li>
+                </ol>
+
+                <h3 style="margin-top: 30px;">For Local Testing</h3>
+                <div class="code-block">
+npm run build<br>
+node dist/test/test-manager-jobs.js
                 </div>
             </div>
+        </div>
 
-            <div class="section">
-                <h2>Key Features</h2>
-                <div class="feature-grid">
-                    <div class="feature">
-                        <strong>🤖 MCP Compatible</strong>
-                        <p>Works with Claude Desktop, Cursor, and any MCP-compatible AI client</p>
-                    </div>
-                    <div class="feature">
-                        <strong>⚙️ Configuration-Driven</strong>
-                        <p>Add companies via JSON config - no code changes needed</p>
-                    </div>
-                    <div class="feature">
-                        <strong>📊 Smart Parsing</strong>
-                        <p>Regex-based extraction (no heavy dependencies like Puppeteer)</p>
-                    </div>
-                    <div class="feature">
-                        <strong>🛡️ Error Tracking</strong>
-                        <p>Classify errors: 404s, timeouts, network issues, parse errors</p>
-                    </div>
-                    <div class="feature">
-                        <strong>📈 Extensible</strong>
-                        <p>Designed for 250+ companies - platform-agnostic extractors</p>
-                    </div>
-                    <div class="feature">
-                        <strong>📋 CSV Reports</strong>
-                        <p>Generate batch reports for successful and failed extractions</p>
-                    </div>
-                </div>
+        <!-- How It Works Section -->
+        <div class="content-section" id="how-it-works">
+            <div class="section-header">
+                <h2>How It Works</h2>
+                <p>Same extraction engine, different interfaces</p>
             </div>
-
-            <div class="section">
-                <h2>Quick Start</h2>
-                
-                <h3>1. Installation</h3>
-                <div class="command">
-                    npm install<br>
-                    npm run build
-                </div>
-
-                <h3>2. Run MCP Server</h3>
-                <div class="command">
-                    npm start
-                </div>
-
-                <h3>3. Configure in Claude Desktop</h3>
-                <p>Edit <code>~/.claude/claude_desktop_config.json</code>:</p>
-                <div class="command">
-                    {<br>
-                    &nbsp;&nbsp;"mcpServers": {<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;"job-search": {<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"command": "node",<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"args": ["path/to/dist/server.js"]<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
-                    &nbsp;&nbsp;}<br>
-                    }
-                </div>
-
-                <h3>4. Use in Claude</h3>
-                <p>Just ask: <em>"Find me senior manager jobs at Amgen and Pfizer"</em></p>
-            </div>
-
-            <div class="section">
-                <h2>Project Structure</h2>
-                <table>
-                    <tr>
-                        <th>Directory</th>
-                        <th>Purpose</th>
-                    </tr>
-                    <tr>
-                        <td><code>src/server.ts</code></td>
-                        <td>MCP server entry point</td>
-                    </tr>
-                    <tr>
-                        <td><code>src/search-executor.ts</code></td>
-                        <td>Job search orchestrator</td>
-                    </tr>
-                    <tr>
-                        <td><code>src/extractors/</code></td>
-                        <td>5 company-specific parsers</td>
-                    </tr>
-                    <tr>
-                        <td><code>src/config.json</code></td>
-                        <td>Company configurations</td>
-                    </tr>
-                    <tr>
-                        <td><code>sites/</code></td>
-                        <td>Company metadata & search parameters</td>
-                    </tr>
-                    <tr>
-                        <td><code>test/</code></td>
-                        <td>4 professional tests</td>
-                    </tr>
-                    <tr>
-                        <td><code>docs/</code></td>
-                        <td>Comprehensive guides & API reference</td>
-                    </tr>
-                    <tr>
-                        <td><code>app/</code></td>
-                        <td>Optional React demo (Next.js)</td>
-                    </tr>
+            <div class="section-body">
+                <h3>Architecture Overview</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Component</th>
+                            <th>AI Path</th>
+                            <th>Manual Path</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Interface</strong></td>
+                            <td>Claude/ChatGPT Chat</td>
+                            <td>Web Browser</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Server</strong></td>
+                            <td>MCP Server (src/server.ts)</td>
+                            <td>Next.js API (app/api/)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Logic</strong></td>
+                            <td colspan="2" class="check" style="text-align: center;">Shared: SearchExecutor + Extractors</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Output</strong></td>
+                            <td>Markdown Response</td>
+                            <td>JSON → React UI</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Reports</strong></td>
+                            <td>AI Summarizes</td>
+                            <td>CSV Download</td>
+                        </tr>
+                    </tbody>
                 </table>
-            </div>
 
-            <div class="section">
-                <h2>Adding Companies</h2>
-                <p>The system is designed to scale to 250+ companies with minimal effort:</p>
-                
-                <h3>Step 1: Add Configuration</h3>
-                <p>Edit <code>src/config.json</code>:</p>
-                <div class="command">
-                    "sites": [<br>
-                    &nbsp;&nbsp;{<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;"name": "NewCompany",<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;"search_url": "https://careers.newcompany.com/search?q={SEARCH_TERM}"<br>
-                    &nbsp;&nbsp;}<br>
-                    ]
+                <h3 style="margin-top: 30px;">Job Extraction Process</h3>
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 6px; margin: 20px 0;">
+                    <strong>1. Search Job Listings</strong><br>
+                    <span style="color: #666;">Fetch URLs from each company's career site based on search term</span>
+
+                    <br><br>
+
+                    <strong>2. Extract Job Details</strong><br>
+                    <span style="color: #666;">Parse HTML using company-specific regex patterns (Workday, Eightfold AI, Drupal)</span>
+
+                    <br><br>
+
+                    <strong>3. Track Errors Intelligently</strong><br>
+                    <span style="color: #666;">Classify failures: 404 (not found), timeout, network error, parse error</span>
+
+                    <br><br>
+
+                    <strong>4. Return Structured Data</strong><br>
+                    <span style="color: #666;">JSON with job title, description, requirements, expiry date, apply link</span>
+
+                    <br><br>
+
+                    <strong>5. Optional CSV Report</strong><br>
+                    <span style="color: #666;">Generate downloadable CSV for successful & failed extractions</span>
                 </div>
 
-                <h3>Step 2: Create Site Definition</h3>
-                <p>Add <code>sites/newcompany.json</code> with search parameters (see sample in <code>test/sample.json</code>)</p>
+                <div class="callout callout-success">
+                    <strong>✓ No AI Required:</strong> The job extraction works completely without any LLM or machine learning. 
+                    AI integration is optional and only enhances the user experience by allowing natural language queries.
+                </div>
 
-                <h3>Step 3: Add Extractor (if new platform)</h3>
-                <p>Create <code>src/extractors/newcompany.ts</code> with HTML parsing rules</p>
+                <h3 style="margin-top: 30px;">Supported Companies</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Company</th>
+                            <th>Platform</th>
+                            <th>Search URL Pattern</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Amgen</td>
+                            <td>Workday</td>
+                            <td>amgen.wd1.myworkdayjobs.com</td>
+                        </tr>
+                        <tr>
+                            <td>Pfizer</td>
+                            <td>Workday</td>
+                            <td>pfizer.wd1.myworkdayjobs.com</td>
+                        </tr>
+                        <tr>
+                            <td>GSK</td>
+                            <td>Workday</td>
+                            <td>jobs.gsk.com</td>
+                        </tr>
+                        <tr>
+                            <td>Bayer</td>
+                            <td>Eightfold AI</td>
+                            <td>bayer.eightfold.ai</td>
+                        </tr>
+                        <tr>
+                            <td>Novartis</td>
+                            <td>Drupal</td>
+                            <td>novartis.com/careers</td>
+                        </tr>
+                    </tbody>
+                </table>
 
-                <h3>Step 4: Register Extractor</h3>
-                <p>Update <code>src/extractors/index.ts</code> to include new company</p>
-
-                <div class="highlight">
-                    <strong>💡 Tip:</strong> If the company uses an existing platform (Workday, Eightfold AI, Drupal), 
-                    you can reuse the existing extractor - only config changes needed!
+                <div class="callout callout-info">
+                    <strong>💡 Expandable:</strong> Add more companies by updating <code>src/config.json</code> with company name and career site URL. 
+                    No code changes needed for similar platforms!
                 </div>
             </div>
+        </div>
 
-            <div class="section">
+        <!-- Tech Stack Section -->
+        <div class="content-section">
+            <div class="section-header">
                 <h2>Technology Stack</h2>
-                <table>
+                <p>Modern, efficient, production-ready</p>
+            </div>
+            <div class="section-body">
+                <table class="comparison-table">
                     <tr>
                         <th>Component</th>
                         <th>Technology</th>
+                        <th>Version</th>
                     </tr>
                     <tr>
                         <td>Protocol</td>
                         <td>Model Context Protocol (MCP) SDK</td>
+                        <td>Latest</td>
                     </tr>
                     <tr>
                         <td>Runtime</td>
-                        <td>Node.js v18+ (LTS: v18, v20, v22)</td>
+                        <td>Node.js (LTS)</td>
+                        <td>v24.19+ (recommended)</td>
                     </tr>
                     <tr>
                         <td>Language</td>
-                        <td>TypeScript 5.3+ (strict mode)</td>
+                        <td>TypeScript</td>
+                        <td>5.3+ (strict mode)</td>
                     </tr>
                     <tr>
-                        <td>Parsing</td>
-                        <td>Regex (no Puppeteer, jsdom, or Cheerio)</td>
-                    </tr>
-                    <tr>
-                        <td>Build</td>
-                        <td>TypeScript Compiler (tsc)</td>
+                        <td>HTML Parsing</td>
+                        <td>Regex (native)</td>
+                        <td>Zero dependencies</td>
                     </tr>
                     <tr>
                         <td>Optional UI</td>
-                        <td>React + Next.js + Tailwind CSS</td>
+                        <td>React + Next.js</td>
+                        <td>Latest LTS</td>
+                    </tr>
+                    <tr>
+                        <td>Styling</td>
+                        <td>Tailwind CSS</td>
+                        <td>Latest</td>
+                    </tr>
+                    <tr>
+                        <td>Build Tool</td>
+                        <td>TypeScript Compiler</td>
+                        <td>5.3+</td>
                     </tr>
                 </table>
-            </div>
 
-            <div class="section">
-                <h2>Documentation & Resources</h2>
-                <p>Comprehensive guides are included in the <code>docs/</code> folder:</p>
-                <ul style="margin-left: 20px; margin-top: 15px;">
-                    <li><strong>SETUP.md</strong> - Installation, requirements, troubleshooting</li>
-                    <li><strong>RUNNING_TESTS.md</strong> - Test suite documentation</li>
-                    <li><strong>API.md</strong> - REST API reference & SDK usage</li>
-                    <li><strong>DEPLOYMENT.md</strong> - Vercel & AWS deployment</li>
-                    <li><strong>RATE_LIMITING.md</strong> - Configuration for API limits</li>
-                    <li><strong>AI_CLARIFICATION.md</strong> - Architecture & MCP details</li>
-                </ul>
-            </div>
-
-            <div class="section">
-                <h2>Get Started</h2>
-                <div class="links">
-                    <a href="https://github.com/saurabhgayali/JobSearchMCP" class="btn btn-primary">View on GitHub</a>
-                    <a href="./docs/SETUP.md" class="btn btn-secondary">Read Setup Guide</a>
-                    <a href="./docs/API.md" class="btn btn-secondary">API Reference</a>
+                <div class="callout callout-warning">
+                    <strong>⚡ Performance Benefits:</strong> No external parsing libraries (Puppeteer, jsdom, Cheerio). 
+                    Regex-based extraction is 10-100x faster with minimal memory footprint.
                 </div>
             </div>
         </div>
 
-        <footer>
-            <p>Job Search MCP • Configuration-Driven • MCP Compatible • Open Source</p>
-            <p style="margin-top: 10px; font-size: 0.9rem; opacity: 0.7;">Node.js v18+ • TypeScript 5.3+ • Zero External Dependencies</p>
-        </footer>
+        <!-- Resources Section -->
+        <div class="content-section">
+            <div class="section-header">
+                <h2>Documentation & Resources</h2>
+            </div>
+            <div class="section-body">
+                <div class="btn-group">
+                    <a href="./docs-html/index.html" class="btn btn-primary">📚 Full Documentation</a>
+                    <a href="https://github.com/saurabhgayali/JobSearchMCP" class="btn btn-secondary">🔗 GitHub Repository</a>
+                    <a href="./docs-html/index.html#deployment" class="btn btn-outline">🚀 Deployment Guide</a>
+                    <a href="./docs-html/index.html#api" class="btn btn-outline">📖 API Reference</a>
+                </div>
+
+                <h3>Included Guides</h3>
+                <ul>
+                    <li><strong>SETUP.md</strong> - Installation requirements and troubleshooting</li>
+                    <li><strong>RUNNING_TESTS.md</strong> - Test suite documentation with examples</li>
+                    <li><strong>API.md</strong> - REST API reference and TypeScript SDK</li>
+                    <li><strong>DEPLOYMENT.md</strong> - Deploy to Vercel or AWS Lambda</li>
+                    <li><strong>RATE_LIMITING.md</strong> - Configuration for API usage limits</li>
+                    <li><strong>AI_CLARIFICATION.md</strong> - Architecture and MCP details</li>
+                </ul>
+
+                <p style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e0e4e8; color: #666;">
+                    <strong>Full documentation available at:</strong> <a href="./docs-html/index.html" style="color: #2c3e50; text-decoration: underline;">Job Search MCP Docs</a>
+                </p>
+            </div>
+        </div>
     </div>
+
+    <footer>
+        <div class="container">
+            <p><strong>Job Search MCP</strong> • Configuration-Driven • MCP-Compatible • Open Source</p>
+            <p>Node.js v24.19+ • TypeScript 5.3+ • Zero Heavy Dependencies</p>
+            <p style="margin-top: 20px;">
+                <a href="https://github.com/saurabhgayali/JobSearchMCP">GitHub</a> • 
+                <a href="./docs-html/index.html">Documentation</a> • 
+                <a href="#overview">Overview</a>
+            </p>
+        </div>
+    </footer>
 </body>
 </html>

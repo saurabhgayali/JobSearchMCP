@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Search MCP - Complete Documentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            background: #f5f6f7;
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: #2c3e50;
+            color: white;
+            overflow-y: auto;
+            padding: 30px 0;
+            z-index: 1000;
+        }
+
+        .sidebar-logo {
+            padding: 0 20px 30px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            border-bottom: 1px solid #34495e;
+            margin-bottom: 20px;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 10px 20px;
+            color: #ecf0f1;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar a:hover {
+            background: #34495e;
+            border-left-color: #3498db;
+        }
+
+        .sidebar a.active {
+            background: #34495e;
+            border-left-color: #3498db;
+            color: #3498db;
+        }
+
+        .sidebar .section-title {
+            padding: 15px 20px 8px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: #95a5a6;
+            margin-top: 10px;
+        }
+
+        main {
+            margin-left: 280px;
+            padding: 40px;
+            max-width: 900px;
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            border-bottom: 3px solid #555;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            color: #34495e;
+            font-size: 1.8rem;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #bdc3c7;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            color: #555;
+            font-size: 1.3rem;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        h4 {
+            color: #666;
+            font-size: 1.05rem;
+            margin-top: 15px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            margin-bottom: 15px;
+            color: #555;
+            line-height: 1.7;
+        }
+
+        code {
+            background: #ecf0f1;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            color: #e74c3c;
+            font-size: 0.9em;
+        }
+
+        pre {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+        }
+
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+
+        li {
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e0e4e8;
+        }
+
+        th {
+            background: #ecf0f1;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        tr:hover {
+            background: #fafbfc;
+        }
+
+        .callout {
+            background: #ecf0f1;
+            border-left: 4px solid #555;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+
+        .callout-info {
+            border-left-color: #3498db;
+            background: #ebf5fb;
+        }
+
+        .callout-success {
+            border-left-color: #27ae60;
+            background: #eafaf1;
+        }
+
+        .callout-warning {
+            border-left-color: #e67e22;
+            background: #fef5e7;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background: #2c3e50;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+        }
+
+        .back-to-top.show {
+            display: flex;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            main {
+                margin-left: 0;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            h2 {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="sidebar">
+        <div class="sidebar-logo">📚 Docs</div>
+        
+        <div class="section-title">Getting Started</div>
+        <a href="#setup" class="nav-link">Setup Guide</a>
+        <a href="#running-tests" class="nav-link">Running Tests</a>
+        
+        <div class="section-title">Integration</div>
+        <a href="#api" class="nav-link">REST API</a>
+        <a href="#deployment" class="nav-link">Deployment</a>
+        <a href="#rate-limiting" class="nav-link">Rate Limiting</a>
+        
+        <div class="section-title">Architecture</div>
+        <a href="#ai-clarification" class="nav-link">AI Architecture</a>
+        <a href="#summary" class="nav-link">v0.1 Summary</a>
+    </nav>
+
+    <main>
+        <!-- Setup Section -->
+        <section id="setup" class="section active">
+            <h1>Setup Guide</h1>
+            
+            <h2>System Requirements</h2>
+            <table>
+                <tr>
+                    <th>Requirement</th>
+                    <th>Version</th>
+                </tr>
+                <tr>
+                    <td><strong>Node.js</strong></td>
+                    <td>v24.19+ (LTS)</td>
+                </tr>
+                <tr>
+                    <td><strong>npm</strong></td>
+                    <td>v10.0.0 or higher</td>
+                </tr>
+                <tr>
+                    <td><strong>Memory</strong></td>
+                    <td>512 MB minimum</td>
+                </tr>
+                <tr>
+                    <td><strong>Disk Space</strong></td>
+                    <td>500 MB for dependencies</td>
+                </tr>
+            </table>
+
+            <h2>Installation Steps</h2>
+            
+            <h3>1. Clone Repository</h3>
+            <pre><code>git clone https://github.com/saurabhgayali/JobSearchMCP.git
+cd JobSearchMCP</code></pre>
+
+            <h3>2. Install Dependencies</h3>
+            <pre><code>npm install</code></pre>
+
+            <h3>3. Build TypeScript</h3>
+            <pre><code>npm run build</code></pre>
+
+            <h3>4. Verify Installation</h3>
+            <pre><code>node dist/test/test-config.js</code></pre>
+
+            <div class="callout callout-success">
+                <strong>✓ Success:</strong> You should see a list of supported companies (Amgen, Bayer, GSK, Novartis, Pfizer)
+            </div>
+
+            <h2>Project Structure</h2>
+            <pre><code>JobSearchMCP/
+├── src/                          # Core TypeScript source
+│   ├── config.json              # Company configurations
+│   ├── search-executor.ts       # Search logic
+│   └── extractors/              # Company-specific parsers
+├── test/                        # Professional test suite
+│   ├── test-config.ts
+│   ├── test-search.ts
+│   ├── test-extractors.ts
+│   └── test-manager-jobs.ts
+├── app/                         # Next.js demo (optional)
+│   ├── page.tsx                # Root redirect
+│   ├── demo/page.tsx           # Job search UI
+│   └── api/search-jobs/route.ts # REST endpoint
+├── docs/                        # Documentation
+├── package.json                # Node.js dependencies
+├── tsconfig.json               # TypeScript config
+└── README.md                    # Overview</code></pre>
+
+            <h2>Quick Commands</h2>
+            <table>
+                <tr>
+                    <th>Command</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>npm run build</code></td>
+                    <td>Compile TypeScript to JavaScript</td>
+                </tr>
+                <tr>
+                    <td><code>npm start</code></td>
+                    <td>Run MCP server</td>
+                </tr>
+                <tr>
+                    <td><code>npm test</code></td>
+                    <td>Run test suite</td>
+                </tr>
+                <tr>
+                    <td><code>npm run dev</code></td>
+                    <td>Start MCP with ts-node (dev mode)</td>
+                </tr>
+            </table>
+
+            <h2>Troubleshooting</h2>
+            
+            <h3>Node.js Version Issue</h3>
+            <p>Verify you have Node v24.19+:</p>
+            <pre><code>node --version</code></pre>
+            <p>If not, install via nvm:</p>
+            <pre><code>nvm install 24.19
+nvm use 24.19</code></pre>
+
+            <h3>Module Not Found</h3>
+            <p>Rebuild dependencies and clear cache:</p>
+            <pre><code>rm -rf node_modules package-lock.json
+npm install
+npm run build</code></pre>
+
+            <h3>Build Errors</h3>
+            <p>Ensure TypeScript compiles:</p>
+            <pre><code>npm run build</code></pre>
+            <p>Should complete with no output (clean compilation).</p>
+        </section>
+
+        <!-- Running Tests Section -->
+        <section id="running-tests" class="section">
+            <h1>Running Tests</h1>
+            
+            <h2>Overview</h2>
+            <p>4 professional tests validate the entire job search pipeline:</p>
+
+            <h3>Test 1: Configuration Loading</h3>
+            <pre><code>node dist/test/test-config.js</code></pre>
+            <p><strong>Runtime:</strong> < 1 second</p>
+            <p><strong>Purpose:</strong> Verify company configurations load correctly</p>
+            <p><strong>Expected Output:</strong> List of 5 companies with search URLs</p>
+
+            <h3>Test 2: Job Search</h3>
+            <pre><code>node dist/test/test-search.js</code></pre>
+            <p><strong>Runtime:</strong> 30-60 seconds</p>
+            <p><strong>Purpose:</strong> Test job search across all companies</p>
+            <p><strong>Expected Output:</strong> 100+ job URLs found per company</p>
+
+            <h3>Test 3: Extractors</h3>
+            <pre><code>node dist/test/test-extractors.js</code></pre>
+            <p><strong>Runtime:</strong> 5-10 seconds</p>
+            <p><strong>Purpose:</strong> Validate job detail extraction</p>
+            <p><strong>Expected Output:</strong> Extracted job details (title, description, expiry date)</p>
+
+            <h3>Test 4: End-to-End Integration</h3>
+            <pre><code>node dist/test/test-manager-jobs.js</code></pre>
+            <p><strong>Runtime:</strong> 60-120 seconds</p>
+            <p><strong>Purpose:</strong> Full pipeline: search → extract → generate CSV reports</p>
+            <p><strong>Expected Output:</strong></p>
+            <ul>
+                <li><code>test/manager-jobs-success.csv</code> - Successful job extractions</li>
+                <li><code>test/manager-jobs-errors.csv</code> - Failed URLs with error classification</li>
+            </ul>
+
+            <h2>Run All Tests</h2>
+            <pre><code>npm run build && node dist/test/test-manager-jobs.js</code></pre>
+
+            <h2>Error Classification</h2>
+            <table>
+                <tr>
+                    <th>Error Code</th>
+                    <th>Meaning</th>
+                    <th>Example</th>
+                </tr>
+                <tr>
+                    <td>NOT_FOUND</td>
+                    <td>Job URL returns 404</td>
+                    <td>Job was deleted</td>
+                </tr>
+                <tr>
+                    <td>TIMEOUT</td>
+                    <td>Request took too long</td>
+                    <td>Career site slow/down</td>
+                </tr>
+                <tr>
+                    <td>NETWORK_ERROR</td>
+                    <td>Connection failed</td>
+                    <td>No internet/firewall</td>
+                </tr>
+                <tr>
+                    <td>HTTP_ERROR</td>
+                    <td>Server error (5xx)</td>
+                    <td>500, 502, 503</td>
+                </tr>
+                <tr>
+                    <td>PARSE_ERROR</td>
+                    <td>HTML structure unexpected</td>
+                    <td>Site layout changed</td>
+                </tr>
+            </table>
+
+            <h2>CSV Report Format</h2>
+            
+            <h3>Success Report (manager-jobs-success.csv)</h3>
+            <pre><code>Company,Job Title,Description,Expiry Date,Apply Link
+Amgen,Senior Manager,Lead team of 5...,2025-01-15,https://...
+Pfizer,Product Manager,Oversee launches...,2025-02-28,https://...</code></pre>
+
+            <h3>Error Report (manager-jobs-errors.csv)</h3>
+            <pre><code>Company,URL,Error Code,HTTP Status,Error Message
+Bayer,https://...,NOT_FOUND,404,Page not found
+GSK,https://...,TIMEOUT,,Request timeout</code></pre>
+        </section>
+
+        <!-- API Section -->
+        <section id="api" class="section">
+            <h1>REST API Reference</h1>
+            
+            <h2>Endpoint</h2>
+            <pre><code>POST /api/search-jobs</code></pre>
+
+            <h2>Request</h2>
+            <pre><code>{
+  "query": "Manager",
+  "companies": ["amgen", "pfizer", "gsk", "bayer", "novartis"]
+}</code></pre>
+
+            <h2>Response</h2>
+            <pre><code>{
+  "jobs": [
+    {
+      "sno": 1,
+      "company": "Amgen",
+      "jobTitle": "Senior Manager",
+      "description": "Lead cross-functional team...",
+      "url": "https://...",
+      "expiryDate": "2025-01-15",
+      "applyLink": "https://..."
+    }
+  ],
+  "errors": [
+    {
+      "sno": 1,
+      "company": "Bayer",
+      "url": "https://...",
+      "errorCode": "NOT_FOUND",
+      "httpStatus": "404",
+      "errorMessage": "Job listing removed",
+      "attemptedAt": "2026-08-20T10:30:00Z"
+    }
+  ]
+}</code></pre>
+
+            <h2>Company IDs</h2>
+            <ul>
+                <li><code>amgen</code> - Amgen (Workday)</li>
+                <li><code>pfizer</code> - Pfizer (Workday)</li>
+                <li><code>gsk</code> - GSK (Workday)</li>
+                <li><code>bayer</code> - Bayer (Eightfold AI)</li>
+                <li><code>novartis</code> - Novartis (Drupal)</li>
+            </ul>
+
+            <h2>Status Codes</h2>
+            <table>
+                <tr>
+                    <th>Code</th>
+                    <th>Meaning</th>
+                </tr>
+                <tr>
+                    <td>200</td>
+                    <td>Success - results returned</td>
+                </tr>
+                <tr>
+                    <td>400</td>
+                    <td>Bad request - missing query or companies</td>
+                </tr>
+                <tr>
+                    <td>429</td>
+                    <td>Rate limit exceeded (5 searches/day/IP)</td>
+                </tr>
+                <tr>
+                    <td>500</td>
+                    <td>Server error</td>
+                </tr>
+            </table>
+
+            <h2>Rate Limit Response</h2>
+            <pre><code>{
+  "error": "Rate limit exceeded. Maximum 5 searches per 24 hours per IP. Try again in 18 hours."
+}</code></pre>
+
+            <h2>cURL Example</h2>
+            <pre><code>curl -X POST http://localhost:3000/api/search-jobs \
+  -H "Content-Type: application/json" \
+  -d '{
+    "query": "Manager",
+    "companies": ["amgen", "pfizer"]
+  }'</code></pre>
+
+            <h2>JavaScript Example</h2>
+            <pre><code>const response = await fetch('/api/search-jobs', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    query: 'Manager',
+    companies: ['amgen', 'pfizer', 'gsk']
+  })
+});
+
+const data = await response.json();
+console.log(data.jobs);
+console.log(data.errors);</code></pre>
+        </section>
+
+        <!-- Deployment Section -->
+        <section id="deployment" class="section">
+            <h1>Deployment Guide</h1>
+            
+            <h2>Vercel (Recommended - 5 minutes)</h2>
+            
+            <h3>Prerequisites</h3>
+            <ul>
+                <li>GitHub account with repository pushed</li>
+                <li>Vercel account (free)</li>
+            </ul>
+
+            <h3>Steps</h3>
+            <ol>
+                <li>Visit <a href="https://vercel.com" target="_blank">vercel.com</a></li>
+                <li>Click "New Project"</li>
+                <li>Import your GitHub repository</li>
+                <li>Click "Deploy" (Vercel auto-detects Next.js + TypeScript)</li>
+                <li>Access your app at: <code>https://your-project.vercel.app/</code></li>
+            </ol>
+
+            <h3>Environment Variables (Optional)</h3>
+            <p>In Vercel project settings, add:</p>
+            <pre><code>RATE_LIMIT_MAX_REQUESTS=5
+RATE_LIMIT_WINDOW=86400</code></pre>
+
+            <h3>Custom Domain</h3>
+            <p>Settings → Domains → Add custom domain → Configure DNS</p>
+
+            <div class="callout callout-success">
+                <strong>✓ Done:</strong> Your job search app is live!
+            </div>
+
+            <h2>AWS Lambda (Alternative - 30+ minutes)</h2>
+            
+            <h3>Architecture</h3>
+            <pre><code>CloudFront → API Gateway → Lambda → ElastiCache (Redis)</code></pre>
+
+            <h3>Steps</h3>
+            <ol>
+                <li><strong>Build:</strong> <code>npm run build</code></li>
+                <li><strong>Create Lambda Function:</strong> Upload ZIP from <code>dist/</code></li>
+                <li><strong>API Gateway:</strong> Create REST API, map routes</li>
+                <li><strong>ElastiCache:</strong> Setup Redis for rate limiting</li>
+                <li><strong>CloudFront:</strong> CDN distribution for demo files</li>
+                <li><strong>Monitor:</strong> CloudWatch logs & metrics</li>
+            </ol>
+
+            <h3>Estimated Monthly Cost</h3>
+            <ul>
+                <li>Lambda: $0.20 (1M requests)</li>
+                <li>API Gateway: $3.50</li>
+                <li>ElastiCache Redis: $15.00</li>
+                <li>CloudFront: $0.50</li>
+                <li><strong>Total:</strong> ~$20/month</li>
+            </ul>
+
+            <div class="callout callout-info">
+                <strong>💡 Tip:</strong> Start with Vercel free tier. Scale to AWS only if you exceed limits.
+            </div>
+        </section>
+
+        <!-- Rate Limiting Section -->
+        <section id="rate-limiting" class="section">
+            <h1>Rate Limiting Configuration</h1>
+            
+            <h2>Overview</h2>
+            <p>Protects backend from abuse. Default: <strong>5 searches per 24 hours per IP</strong></p>
+
+            <h2>How It Works</h2>
+            <ol>
+                <li>Extract client IP from <code>X-Forwarded-For</code> or <code>X-Real-IP</code> headers</li>
+                <li>Check if IP has exceeded limit in current window</li>
+                <li>If limit exceeded, return HTTP 429</li>
+                <li>If within limit, increment counter and proceed</li>
+            </ol>
+
+            <h2>Configuration</h2>
+            <p>Edit <code>app/api/search-jobs/route.ts</code>:</p>
+            <pre><code>const RATE_LIMIT_MAX_REQUESTS = 5;        // 5 searches
+const RATE_LIMIT_WINDOW = 24 * 60 * 60 * 1000;  // 24 hours</code></pre>
+
+            <h2>Development Mode</h2>
+            <p>In-memory storage (resets on server restart)</p>
+            <pre><code>const requestCounts: { [key: string]: { count: number; resetTime: number } } = {};</code></pre>
+
+            <h2>Production Mode</h2>
+            <p>Use Redis (ElastiCache on AWS or Heroku Redis):</p>
+            <pre><code>const redis = new Redis(process.env.REDIS_URL);
+await redis.incr(`rate-limit:${clientIp}`);
+await redis.expire(`rate-limit:${clientIp}`, RATE_LIMIT_WINDOW / 1000);</code></pre>
+
+            <h2>Response When Rate Limited</h2>
+            <pre><code>HTTP 429 Too Many Requests
+
+{
+  "error": "Rate limit exceeded. Maximum 5 searches per 24 hours per IP. Try again in 18 hours."
+}</code></pre>
+
+            <h2>Testing Rate Limits</h2>
+            <pre><code>for i in {1..6}; do
+  curl -X POST http://localhost:3000/api/search-jobs \
+    -H "Content-Type: application/json" \
+    -d '{"query":"Manager","companies":["amgen"]}' \
+    -H "X-Forwarded-For: 192.168.1.1"
+  echo "Request $i"
+done</code></pre>
+            <p>6th request should return 429</p>
+        </section>
+
+        <!-- AI Clarification Section -->
+        <section id="ai-clarification" class="section">
+            <h1>AI Architecture & Clarification</h1>
+            
+            <h2>Key Points</h2>
+            <ul>
+                <li><strong>Demo App:</strong> Pure web application - NO AI needed ✅</li>
+                <li><strong>MCP Server:</strong> Optional AI integration (v0.3+) 🤖</li>
+                <li><strong>Core Pipeline:</strong> Works 100% independently ⚙️</li>
+            </ul>
+
+            <h2>Two Interfaces</h2>
+            
+            <h3>1. Standalone Demo App (Primary)</h3>
+            <table>
+                <tr>
+                    <th>Property</th>
+                    <th>Value</th>
+                </tr>
+                <tr>
+                    <td>File</td>
+                    <td><code>app/demo/page.tsx</code></td>
+                </tr>
+                <tr>
+                    <td>Technology</td>
+                    <td>React + Next.js</td>
+                </tr>
+                <tr>
+                    <td>Deployment</td>
+                    <td>Vercel</td>
+                </tr>
+                <tr>
+                    <td>URL</td>
+                    <td>https://app.vercel.app/</td>
+                </tr>
+                <tr>
+                    <td>AI Required</td>
+                    <td>NO ✅</td>
+                </tr>
+                <tr>
+                    <td>Users</td>
+                    <td>Job seekers, HR professionals</td>
+                </tr>
+            </table>
+
+            <h3>2. MCP Server (Optional - Future)</h3>
+            <table>
+                <tr>
+                    <th>Property</th>
+                    <th>Value</th>
+                </tr>
+                <tr>
+                    <td>File</td>
+                    <td><code>src/server.ts</code></td>
+                </tr>
+                <tr>
+                    <td>Technology</td>
+                    <td>MCP SDK + Node.js</td>
+                </tr>
+                <tr>
+                    <td>Integration</td>
+                    <td>Claude, ChatGPT, Cursor</td>
+                </tr>
+                <tr>
+                    <td>AI Required</td>
+                    <td>YES (optional)</td>
+                </tr>
+                <tr>
+                    <td>Users</td>
+                    <td>AI enthusiasts, developers</td>
+                </tr>
+            </table>
+
+            <h2>What Gets Deployed</h2>
+            <pre><code>✅ Included:
+├── app/           (Demo web app)
+├── src/           (Core extraction pipeline)
+├── docs/          (Documentation)
+└── index.html     (Landing page)
+
+❌ Not Included:
+├── /ai/           (gitignored - dev notes)
+├── test/          (Local testing only)
+└── *.md files     (HTML versions provided)</code></pre>
+
+            <h2>Messaging for v0.1</h2>
+            <p>DO mention:</p>
+            <ul>
+                <li>✅ "Job search engine"</li>
+                <li>✅ "Career site aggregator"</li>
+                <li>✅ "Works standalone"</li>
+                <li>✅ "Fast extraction"</li>
+            </ul>
+            <p>DON'T mention:</p>
+            <ul>
+                <li>❌ "AI-powered"</li>
+                <li>❌ "Machine learning"</li>
+                <li>❌ "LLM-based"</li>
+            </ul>
+        </section>
+
+        <!-- Summary Section -->
+        <section id="summary" class="section">
+            <h1>v0.1 Project Summary</h1>
+            
+            <h2>What's Included</h2>
+            <table>
+                <tr>
+                    <th>Component</th>
+                    <th>Status</th>
+                </tr>
+                <tr>
+                    <td>5 Company Support (Amgen, Bayer, GSK, Novartis, Pfizer)</td>
+                    <td>✅ Complete</td>
+                </tr>
+                <tr>
+                    <td>Web Demo App (Next.js React UI)</td>
+                    <td>✅ Complete</td>
+                </tr>
+                <tr>
+                    <td>REST API with Rate Limiting</td>
+                    <td>✅ Complete</td>
+                </tr>
+                <tr>
+                    <td>4 Professional Tests</td>
+                    <td>✅ Complete</td>
+                </tr>
+                <tr>
+                    <td>CSV Report Generation</td>
+                    <td>✅ Complete</td>
+                </tr>
+                <tr>
+                    <td>Error Classification & Tracking</td>
+                    <td>✅ Complete</td>
+                </tr>
+                <tr>
+                    <td>Comprehensive Documentation</td>
+                    <td>✅ Complete</td>
+                </tr>
+                <tr>
+                    <td>TypeScript Strict Mode</td>
+                    <td>✅ Complete</td>
+                </tr>
+            </table>
+
+            <h2>Technology Stack</h2>
+            <table>
+                <tr>
+                    <th>Component</th>
+                    <th>Technology</th>
+                </tr>
+                <tr>
+                    <td>Runtime</td>
+                    <td>Node.js v24.19+ (LTS)</td>
+                </tr>
+                <tr>
+                    <td>Language</td>
+                    <td>TypeScript 5.3+</td>
+                </tr>
+                <tr>
+                    <td>Web Framework</td>
+                    <td>Next.js (React)</td>
+                </tr>
+                <tr>
+                    <td>Styling</td>
+                    <td>Tailwind CSS</td>
+                </tr>
+                <tr>
+                    <td>HTML Parsing</td>
+                    <td>Regex (zero dependencies)</td>
+                </tr>
+                <tr>
+                    <td>Deployment</td>
+                    <td>Vercel (primary) or AWS Lambda</td>
+                </tr>
+            </table>
+
+            <h2>Performance Stats</h2>
+            <ul>
+                <li>Config loading: < 1 second</li>
+                <li>Job search (5 companies): 30-60 seconds</li>
+                <li>Job extraction: 5-10 seconds</li>
+                <li>End-to-end (E2E test): 60-120 seconds</li>
+                <li>Zero external parsing dependencies</li>
+            </ul>
+
+            <h2>Next Steps (v0.2+)</h2>
+            <ul>
+                <li>Scale to 250+ companies</li>
+                <li>Add geographic filtering</li>
+                <li>Implement caching layer</li>
+                <li>Optional MCP integration</li>
+                <li>User authentication</li>
+                <li>Saved jobs feature</li>
+            </ul>
+
+            <div class="callout callout-success">
+                <strong>✓ v0.1 Ready:</strong> Production-ready with comprehensive documentation, error handling, and deployment guides.
+            </div>
+        </section>
+    </main>
+
+    <button class="back-to-top" id="backToTop">↑</button>
+
+    <script>
+        // Navigation
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const target = link.getAttribute('href').substring(1);
+                
+                document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                
+                document.getElementById(target).classList.add('active');
+                link.classList.add('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+
+        // Back to top
+        const backToTopBtn = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTopBtn.classList.add('show');
+            } else {
+                backToTopBtn.classList.remove('show');
+            }
+        });
+
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>
