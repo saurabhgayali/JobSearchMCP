@@ -54,4 +54,4 @@ export { BayerExtractor } from './bayer.js';
 export { GSKExtractor } from './gsk.js';
 export { NovartisExtractor } from './novartis.js';
 export { PfizerExtractor } from './pfizer.js';
-export { JobExtractor, JobExtraction, ExtractionResult } from './types.js';
+export type { JobExtractor, JobExtraction, ExtractionResult } from './types.js';
