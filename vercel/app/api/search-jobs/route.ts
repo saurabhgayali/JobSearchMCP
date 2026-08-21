@@ -1,5 +1,5 @@
-import { SearchExecutor } from '@/src/search-executor';
-import { ExtractorRegistry } from '@/src/extractors/index';
+import { SearchExecutor } from '@/dist/src/search-executor.js';
+import { ExtractorRegistry } from '@/dist/src/extractors/index.js';
 import { NextRequest, NextResponse } from 'next/server';
 
 // Rate limiting configuration
