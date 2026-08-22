@@ -1,0 +1,24 @@
+# Ignore git and build artifacts but keep dist for runtime
+.git
+.gitignore
+node_modules
+.env.local
+.env.*.local
+.next
+out
+build
+dist # Will be copied to vercel/dist during build
+
+# Development
+src
+test
+.vscode
+*.md
+!README.md
+
+# Only deploy from vercel/ directory
+# Everything outside vercel/ except what we need
+.github
+.eslintrc*
+tsconfig.json
+package.json

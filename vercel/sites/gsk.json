@@ -1,0 +1,41 @@
+{
+  "name": "GSK",
+  "career_url": "https://jobs.gsk.com/gb/en/search-results",
+  "search_url": "https://jobs.gsk.com/gb/en/search-results?keywords={keyword}",
+  "params": [
+    {
+      "name": "keywords",
+      "label": "Search",
+      "type": "text",
+      "required": false,
+      "values": []
+    },
+    {
+      "name": "location",
+      "label": "Location",
+      "type": "text",
+      "required": false,
+      "values": []
+    },
+    {
+      "name": "category",
+      "label": "Category",
+      "type": "select",
+      "required": false,
+      "values": [
+        "Sales",
+        "Medical and Clinical",
+        "Manufacturing",
+        "Administrative Services",
+        "Marketing",
+        "Quality",
+        "Engineering",
+        "Science and Technology",
+        "Supply Chain & Logistics",
+        "Finance",
+        "Regulatory",
+        "Commercial Operations"
+      ]
+    }
+  ]
+}

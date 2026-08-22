@@ -1,0 +1,38 @@
+{
+  "name": "Amgen",
+  "career_url": "https://amgen.wd1.myworkdayjobs.com/Careers",
+  "search_url": "https://amgen.wd1.myworkdayjobs.com/Careers?q={keyword}",
+  "params": [
+    {
+      "name": "q",
+      "label": "Search",
+      "type": "text",
+      "required": true,
+      "values": []
+    },
+    {
+      "name": "location",
+      "label": "Location",
+      "type": "text",
+      "required": false,
+      "values": []
+    },
+    {
+      "name": "timeType",
+      "label": "Time Type",
+      "type": "select",
+      "required": false,
+      "values": [
+        "Full time",
+        "Part time"
+      ]
+    },
+    {
+      "name": "country",
+      "label": "Country/Territory",
+      "type": "select",
+      "required": false,
+      "values": []
+    }
+  ]
+}

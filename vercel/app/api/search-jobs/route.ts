@@ -75,7 +75,10 @@ export async function POST(request: NextRequest): Promise<NextResponse<SearchRes
     const jobs: SearchResponse['jobs'] = [];
     const errors: SearchResponse['errors'] = [];
     const executor = new SearchExecutor(60000); // Increased timeout to 60 seconds
-    const configLoader = new ConfigLoader();
+    
+    // Pass sites path - works both locally and on Vercel
+    const sitesPath = process.env.NODE_ENV === 'production' ? './sites' : '../sites';
+    const configLoader = new ConfigLoader(sitesPath);
     let jobCounter = 1;
     let errorCounter = 1;
 

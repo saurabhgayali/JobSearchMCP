@@ -18,11 +18,23 @@ export class ConfigLoader {
   private sitesDir: string;
 
   constructor(sitesDir: string = 'sites') {
-    // Resolve sitesDir relative to project root
-    // From dist/src/config-loader.js -> need to go up 2 levels to reach project root
-    this.sitesDir = path.isAbsolute(sitesDir) 
-      ? sitesDir 
-      : path.join(__dirname, '..', '..', sitesDir);
+    // Try multiple paths for flexibility (local dev, production, Vercel)
+    let resolvedPath: string;
+
+    if (path.isAbsolute(sitesDir)) {
+      resolvedPath = sitesDir;
+    } else {
+      // Try: current working directory + sitesDir
+      const cwdPath = path.join(process.cwd(), sitesDir);
+      if (fs.existsSync(cwdPath)) {
+        resolvedPath = cwdPath;
+      } else {
+        // Fall back to: relative to dist/src/config-loader.js (2 levels up from dist)
+        resolvedPath = path.join(__dirname, '..', '..', sitesDir);
+      }
+    }
+
+    this.sitesDir = resolvedPath;
     this.loadAllSites();
   }
 

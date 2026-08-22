@@ -1,0 +1,22 @@
+{
+  "name": "Bayer",
+  "career_url": "https://bayer.eightfold.ai/careers",
+  "search_url": "https://bayer.eightfold.ai/careers?query={keyword}",
+  "params": [
+    {
+      "name": "query",
+      "label": "Search",
+      "type": "text",
+      "required": false,
+      "values": []
+    },
+    {
+      "name": "location",
+      "label": "Location",
+      "type": "text",
+      "required": false,
+      "values": [],
+      "placeholder": "City, state, zip code or 'remote'"
+    }
+  ]
+}
