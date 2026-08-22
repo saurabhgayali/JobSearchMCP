@@ -1,6 +1,6 @@
 {
   "buildCommand": "cd vercel && npm run build",
-  "installCommand": "npm install && cd vercel && npm install",
+  "installCommand": "npm install --legacy-peer-deps && cd vercel && npm install --legacy-peer-deps",
   "redirects": [
     {
       "source": "/",
