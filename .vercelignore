@@ -1,23 +1,18 @@
-# Ignore git and build artifacts but keep dist for runtime
+# Keep sites/ - it's needed for ConfigLoader at runtime
+# Keep vercel/ - the Next.js app
+sites
+vercel
+
+# Ignore everything else
 .git
 .gitignore
-node_modules
-.env.local
-.env.*.local
-.next
-out
-build
-dist # Will be copied to vercel/dist during build
-
-# Development
+.vscode
+.gitattributes
+*.md
 src
 test
-.vscode
-*.md
-!README.md
-
-# Only deploy from vercel/ directory
-# Everything outside vercel/ except what we need
+dist
+build
 .github
 .eslintrc*
 tsconfig.json
