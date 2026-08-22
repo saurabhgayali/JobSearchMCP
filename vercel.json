@@ -1,4 +1,11 @@
 {
-  "installCommand": "npm install && cd .. && npm install"
+  "buildCommand": "cd vercel && npm run build",
+  "installCommand": "npm install && cd vercel && npm install",
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/demo"
+    }
+  ]
 }
 
