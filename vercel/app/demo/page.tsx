@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 
 interface Job {
   sno: number;
@@ -22,10 +22,11 @@ interface JobError {
   attemptedAt: string;
 }
 
-type SortField = 'jobTitle' | 'company' | 'expiryDate' | 'url';
+type SortField = 'jobTitle' | 'expiryDate';
 type SortOrder = 'asc' | 'desc';
 
 const COMPANIES = ['amgen', 'bayer', 'gsk', 'novartis', 'pfizer'];
+const ITEMS_PER_PAGE_OPTIONS = [10, 20, 50, 100];
 
 export default function JobSearchDemo() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -37,6 +38,12 @@ export default function JobSearchDemo() {
   const [jobsSortOrder, setJobsSortOrder] = useState<SortOrder>('asc');
   const [errorsSortField, setErrorsSortField] = useState<'url' | 'errorCode'>('url');
   const [errorsSortOrder, setErrorsSortOrder] = useState<SortOrder>('asc');
+  const [jobsSearchFilter, setJobsSearchFilter] = useState('');
+  const [errorsSearchFilter, setErrorsSearchFilter] = useState('');
+  const [jobsCurrentPage, setJobsCurrentPage] = useState(1);
+  const [errorsCurrentPage, setErrorsCurrentPage] = useState(1);
+  const [expandedDesc, setExpandedDesc] = useState<number | null>(null);
+  const [itemsPerPage, setItemsPerPage] = useState(20);
 
   const handleCompanyToggle = (company: string) => {
     setSelectedCompanies((prev) =>
@@ -56,6 +63,8 @@ export default function JobSearchDemo() {
     }
 
     setLoading(true);
+    setJobsCurrentPage(1);
+    setErrorsCurrentPage(1);
     try {
       const response = await fetch('/api/search-jobs', {
         method: 'POST',
@@ -69,6 +78,8 @@ export default function JobSearchDemo() {
       const data = await response.json();
       setJobs(data.jobs || []);
       setErrors(data.errors || []);
+      setJobsSearchFilter('');
+      setErrorsSearchFilter('');
     } catch (error) {
       console.error('Search failed:', error);
       alert('Search failed. Check console for details.');
@@ -84,6 +95,7 @@ export default function JobSearchDemo() {
       setJobsSortField(field);
       setJobsSortOrder('asc');
     }
+    setJobsCurrentPage(1);
   };
 
   const sortErrors = (field: 'url' | 'errorCode') => {
@@ -93,38 +105,78 @@ export default function JobSearchDemo() {
       setErrorsSortField(field);
       setErrorsSortOrder('asc');
     }
+    setErrorsCurrentPage(1);
   };
 
-  const sortedJobs = [...jobs].sort((a, b) => {
-    let aVal = a[jobsSortField];
-    let bVal = b[jobsSortField];
+  // Filter and sort jobs
+  const filteredAndSortedJobs = useMemo(() => {
+    return [...jobs]
+      .filter((job) => {
+        const searchLower = jobsSearchFilter.toLowerCase();
+        return (
+          job.jobTitle.toLowerCase().includes(searchLower) ||
+          job.company.toLowerCase().includes(searchLower) ||
+          job.description.toLowerCase().includes(searchLower)
+        );
+      })
+      .sort((a, b) => {
+        let aVal = a[jobsSortField];
+        let bVal = b[jobsSortField];
 
-    if (typeof aVal === 'string') {
-      aVal = aVal.toLowerCase();
-      bVal = (bVal as string).toLowerCase();
-    }
+        if (typeof aVal === 'string') {
+          aVal = aVal.toLowerCase();
+          bVal = (bVal as string).toLowerCase();
+        }
 
-    const comparison = aVal < bVal ? -1 : aVal > bVal ? 1 : 0;
-    return jobsSortOrder === 'asc' ? comparison : -comparison;
-  });
+        const comparison = aVal < bVal ? -1 : aVal > bVal ? 1 : 0;
+        return jobsSortOrder === 'asc' ? comparison : -comparison;
+      });
+  }, [jobs, jobsSearchFilter, jobsSortField, jobsSortOrder]);
 
-  const sortedErrors = [...errors].sort((a, b) => {
-    const aVal = a[errorsSortField];
-    const bVal = b[errorsSortField];
+  // Pagination for jobs
+  const jobsPageCount = Math.ceil(filteredAndSortedJobs.length / itemsPerPage);
+  const paginatedJobs = filteredAndSortedJobs.slice(
+    (jobsCurrentPage - 1) * itemsPerPage,
+    jobsCurrentPage * itemsPerPage
+  );
 
-    const comparison = aVal < bVal ? -1 : aVal > bVal ? 1 : 0;
-    return errorsSortOrder === 'asc' ? comparison : -comparison;
-  });
+  // Filter and sort errors
+  const filteredAndSortedErrors = useMemo(() => {
+    return [...errors]
+      .filter((error) => {
+        const searchLower = errorsSearchFilter.toLowerCase();
+        return (
+          error.company.toLowerCase().includes(searchLower) ||
+          error.url.toLowerCase().includes(searchLower) ||
+          error.errorCode.toLowerCase().includes(searchLower)
+        );
+      })
+      .sort((a, b) => {
+        const aVal = a[errorsSortField];
+        const bVal = b[errorsSortField];
+
+        const comparison = aVal < bVal ? -1 : aVal > bVal ? 1 : 0;
+        return errorsSortOrder === 'asc' ? comparison : -comparison;
+      });
+  }, [errors, errorsSearchFilter, errorsSortField, errorsSortOrder]);
+
+  // Pagination for errors
+  const errorsPageCount = Math.ceil(filteredAndSortedErrors.length / itemsPerPage);
+  const paginatedErrors = filteredAndSortedErrors.slice(
+    (errorsCurrentPage - 1) * itemsPerPage,
+    errorsCurrentPage * itemsPerPage
+  );
 
   const downloadJobsCSV = () => {
-    const headers = ['S.No', 'Company', 'Job Title', 'Description', 'Expiry Date', 'URL'];
-    const rows = jobs.map((job) => [
-      job.sno,
+    const headers = ['S.No', 'Company', 'Job Title', 'Description', 'Expiry Date', 'View Link', 'Apply Link'];
+    const rows = filteredAndSortedJobs.map((job, idx) => [
+      idx + 1,
       job.company,
       `"${job.jobTitle.replace(/"/g, '""')}"`,
       `"${job.description.replace(/"/g, '""').replace(/\n/g, ' ')}"`,
       job.expiryDate,
       job.url,
+      job.applyLink,
     ]);
 
     const csv = [headers, ...rows].map((row) => row.join(',')).join('\n');
@@ -133,8 +185,8 @@ export default function JobSearchDemo() {
 
   const downloadErrorsCSV = () => {
     const headers = ['S.No', 'Company', 'URL', 'Error Code', 'HTTP Status', 'Error Message'];
-    const rows = errors.map((err) => [
-      err.sno,
+    const rows = filteredAndSortedErrors.map((err, idx) => [
+      idx + 1,
       err.company,
       err.url,
       err.errorCode,
@@ -156,238 +208,370 @@ export default function JobSearchDemo() {
     document.body.removeChild(element);
   };
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-8">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="bg-white rounded-lg shadow-md p-8 mb-8">
-          <h1 className="text-4xl font-bold text-gray-800 mb-2">
-            🔍 Job Search Portal
-          </h1>
-          <p className="text-gray-600">
-            Search for jobs across Amgen, Bayer, GSK, Novartis, and Pfizer careers sites
-          </p>
+  const PaginationControls = ({ currentPage, pageCount, onPageChange, itemsPerPage, onItemsPerPageChange }: any) => (
+    <div className="d-flex justify-content-between align-items-center mt-3 pt-3 border-top">
+      <div style={{ fontSize: '0.9rem', color: '#555' }}>
+        <div className="mb-2">
+          Items per page:
+          <select
+            value={itemsPerPage}
+            onChange={(e) => {
+              onItemsPerPageChange(parseInt(e.target.value));
+              onPageChange(1); // Reset to first page
+            }}
+            style={{
+              marginLeft: '0.5rem',
+              padding: '0.375rem 0.5rem',
+              borderColor: '#bdc3c7',
+              borderRadius: '0.25rem',
+              accentColor: '#2c3e50'
+            }}
+          >
+            {ITEMS_PER_PAGE_OPTIONS.map(opt => (
+              <option key={opt} value={opt}>{opt}</option>
+            ))}
+          </select>
         </div>
-
-        {/* Search Section */}
-        <div className="bg-white rounded-lg shadow-md p-8 mb-8">
-          {/* Search Box */}
-          <div className="mb-6">
-            <label className="block text-lg font-semibold text-gray-700 mb-2">
-              Job Search Query
-            </label>
+        Page <strong>{currentPage}</strong> of <strong>{pageCount}</strong>
+      </div>
+      <nav aria-label="Pagination" className="ms-auto">
+        <ul className="pagination mb-0">
+          <li className="page-item" style={{ opacity: currentPage === 1 ? 0.5 : 1 }}>
+            <button
+              className="page-link"
+              onClick={() => onPageChange(1)}
+              disabled={currentPage === 1}
+              style={{ color: '#2c3e50', cursor: currentPage === 1 ? 'not-allowed' : 'pointer' }}
+            >
+              First
+            </button>
+          </li>
+          <li className="page-item" style={{ opacity: currentPage === 1 ? 0.5 : 1 }}>
+            <button
+              className="page-link"
+              onClick={() => onPageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+              style={{ color: '#2c3e50', cursor: currentPage === 1 ? 'not-allowed' : 'pointer' }}
+            >
+              Prev
+            </button>
+          </li>
+          <li className="page-item">
             <input
-              type="text"
-              placeholder="e.g., Manager, Engineer, Analyst..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              type="number"
+              min="1"
+              max={pageCount}
+              value={currentPage}
+              onChange={(e) => {
+                const page = parseInt(e.target.value) || 1;
+                if (page >= 1 && page <= pageCount) onPageChange(page);
+              }}
+              style={{
+                padding: '0.375rem 0.75rem',
+                border: '1px solid #bdc3c7',
+                borderRadius: '0.25rem',
+                width: '60px',
+                textAlign: 'center',
+              }}
             />
-          </div>
+          </li>
+          <li className="page-item" style={{ opacity: currentPage === pageCount ? 0.5 : 1 }}>
+            <button
+              className="page-link"
+              onClick={() => onPageChange(currentPage + 1)}
+              disabled={currentPage === pageCount}
+              style={{ color: '#2c3e50', cursor: currentPage === pageCount ? 'not-allowed' : 'pointer' }}
+            >
+              Next
+            </button>
+          </li>
+          <li className="page-item" style={{ opacity: currentPage === pageCount ? 0.5 : 1 }}>
+            <button
+              className="page-link"
+              onClick={() => onPageChange(pageCount)}
+              disabled={currentPage === pageCount}
+              style={{ color: '#2c3e50', cursor: currentPage === pageCount ? 'not-allowed' : 'pointer' }}
+            >
+              Last
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  );
 
-          {/* Company Selection */}
-          <div className="mb-6">
-            <label className="block text-lg font-semibold text-gray-700 mb-3">
-              Select Companies
-            </label>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-              {COMPANIES.map((company) => (
-                <label key={company} className="flex items-center space-x-2 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={selectedCompanies.includes(company)}
-                    onChange={() => handleCompanyToggle(company)}
-                    className="w-5 h-5 text-indigo-600 border-gray-300 rounded focus:ring-2 focus:ring-indigo-500"
-                  />
-                  <span className="text-gray-700 font-medium capitalize">{company}</span>
-                </label>
-              ))}
+  return (
+    <div style={{ backgroundColor: '#f5f5f5', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+      <div style={{ flex: 1 }}>
+        <div className="container py-5">
+          {/* Header with GitHub Link */}
+          <div className="card shadow-sm mb-5" style={{ borderColor: '#2c3e50', borderWidth: '2px' }}>
+            <div className="card-body" style={{ backgroundColor: '#34495e', color: '#ecf0f1', padding: '2rem' }}>
+              <div className="row align-items-center">
+                <div className="col">
+                  <h1 className="card-title mb-2">Job Search Portal</h1>
+                  <p className="card-text mb-0">Search for positions across Amgen, Bayer, GSK, Novartis, and Pfizer</p>
+                </div>
+                <div className="col-auto">
+                  <a href="https://github.com/saurabh-slackian/JobSearchMCP" target="_blank" rel="noopener noreferrer"
+                    style={{ color: '#ecf0f1', textDecoration: 'none', fontSize: '0.9rem' }}>
+                    → GitHub
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Search Button */}
-          <button
-            onClick={handleSearch}
-            disabled={loading}
-            className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-400 text-white font-bold py-3 px-6 rounded-lg transition duration-200"
-          >
-            {loading ? '🔄 Searching...' : '🔍 Search Jobs'}
-          </button>
-        </div>
+          {/* Search Section */}
+          <div className="card shadow-sm mb-5">
+            <div className="card-body">
+              <div className="mb-4">
+                <label className="form-label" style={{ color: '#2c3e50', fontWeight: '600' }}>
+                  Job Search Query
+                </label>
+                <input type="text" className="form-control" placeholder="e.g., Manager, Engineer, Analyst..."
+                  value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+                  style={{ borderColor: '#bdc3c7' }} />
+              </div>
 
-        {/* Results Section */}
-        {(jobs.length > 0 || errors.length > 0) && (
-          <>
-            {/* Jobs Table */}
-            {jobs.length > 0 && (
-              <div className="bg-white rounded-lg shadow-md p-8 mb-8">
-                <div className="flex justify-between items-center mb-6">
-                  <h2 className="text-2xl font-bold text-gray-800">
-                    ✅ Found Jobs ({jobs.length})
-                  </h2>
-                  <button
-                    onClick={downloadJobsCSV}
-                    className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg transition"
-                  >
-                    📥 Download CSV
-                  </button>
-                </div>
-
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm">
-                    <thead className="bg-gray-100 border-b-2 border-gray-300">
-                      <tr>
-                        <th className="px-4 py-3 text-left font-semibold text-gray-700">S.No</th>
-                        <th className="px-4 py-3 text-left font-semibold text-gray-700">Company</th>
-                        <th
-                          onClick={() => sortJobs('jobTitle')}
-                          className="px-4 py-3 text-left font-semibold text-gray-700 cursor-pointer hover:bg-gray-200"
-                        >
-                          Job Title{' '}
-                          {jobsSortField === 'jobTitle' && (jobsSortOrder === 'asc' ? '↑' : '↓')}
-                        </th>
-                        <th className="px-4 py-3 text-left font-semibold text-gray-700">
-                          Description
-                        </th>
-                        <th
-                          onClick={() => sortJobs('expiryDate')}
-                          className="px-4 py-3 text-left font-semibold text-gray-700 cursor-pointer hover:bg-gray-200"
-                        >
-                          Expiry Date{' '}
-                          {jobsSortField === 'expiryDate' && (jobsSortOrder === 'asc' ? '↑' : '↓')}
-                        </th>
-                        <th className="px-4 py-3 text-left font-semibold text-gray-700">URL</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {sortedJobs.map((job, idx) => (
-                        <tr
-                          key={idx}
-                          className="border-b border-gray-200 hover:bg-gray-50 transition"
-                        >
-                          <td className="px-4 py-3 text-gray-700">{job.sno}</td>
-                          <td className="px-4 py-3">
-                            <span className="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full font-medium text-xs uppercase">
-                              {job.company}
-                            </span>
-                          </td>
-                          <td className="px-4 py-3 font-medium text-gray-800">{job.jobTitle}</td>
-                          <td className="px-4 py-3 text-gray-600">
-                            <div className="max-w-xs truncate" title={job.description}>
-                              {job.description.substring(0, 50)}...
-                            </div>
-                          </td>
-                          <td className="px-4 py-3 text-gray-600">{job.expiryDate}</td>
-                          <td className="px-4 py-3">
-                            <a
-                              href={job.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-indigo-600 hover:text-indigo-800 hover:underline text-xs"
-                            >
-                              View Job →
-                            </a>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+              <div className="mb-4">
+                <label className="form-label" style={{ color: '#2c3e50', fontWeight: '600' }}>
+                  Select Companies
+                </label>
+                <div className="row">
+                  {COMPANIES.map((company) => (
+                    <div key={company} className="col-md-6 col-lg-4 mb-3">
+                      <div className="form-check">
+                        <input className="form-check-input" type="checkbox" id={company}
+                          checked={selectedCompanies.includes(company)}
+                          onChange={() => handleCompanyToggle(company)}
+                          style={{ accentColor: '#2c3e50' }} />
+                        <label className="form-check-label" htmlFor={company}>
+                          <span style={{ textTransform: 'capitalize', color: '#34495e' }}>{company}</span>
+                        </label>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
-            )}
 
-            {/* Errors Table */}
-            {errors.length > 0 && (
-              <div className="bg-white rounded-lg shadow-md p-8">
-                <div className="flex justify-between items-center mb-6">
-                  <h2 className="text-2xl font-bold text-gray-800">
-                    ⚠️ Extraction Errors ({errors.length})
-                  </h2>
-                  <button
-                    onClick={downloadErrorsCSV}
-                    className="bg-orange-600 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded-lg transition"
-                  >
-                    📥 Download CSV
-                  </button>
-                </div>
-
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm">
-                    <thead className="bg-gray-100 border-b-2 border-gray-300">
-                      <tr>
-                        <th className="px-4 py-3 text-left font-semibold text-gray-700">S.No</th>
-                        <th className="px-4 py-3 text-left font-semibold text-gray-700">Company</th>
-                        <th
-                          onClick={() => sortErrors('url')}
-                          className="px-4 py-3 text-left font-semibold text-gray-700 cursor-pointer hover:bg-gray-200"
-                        >
-                          URL {errorsSortField === 'url' && (errorsSortOrder === 'asc' ? '↑' : '↓')}
-                        </th>
-                        <th
-                          onClick={() => sortErrors('errorCode')}
-                          className="px-4 py-3 text-left font-semibold text-gray-700 cursor-pointer hover:bg-gray-200"
-                        >
-                          Error Code{' '}
-                          {errorsSortField === 'errorCode' && (errorsSortOrder === 'asc' ? '↑' : '↓')}
-                        </th>
-                        <th className="px-4 py-3 text-left font-semibold text-gray-700">
-                          HTTP Status
-                        </th>
-                        <th className="px-4 py-3 text-left font-semibold text-gray-700">
-                          Error Message
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {sortedErrors.map((error, idx) => (
-                        <tr
-                          key={idx}
-                          className="border-b border-gray-200 hover:bg-gray-50 transition"
-                        >
-                          <td className="px-4 py-3 text-gray-700">{error.sno}</td>
-                          <td className="px-4 py-3">
-                            <span className="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full font-medium text-xs uppercase">
-                              {error.company}
-                            </span>
-                          </td>
-                          <td className="px-4 py-3">
-                            <a
-                              href={error.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-indigo-600 hover:text-indigo-800 hover:underline text-xs"
-                            >
-                              {error.url.substring(0, 50)}...
-                            </a>
-                          </td>
-                          <td className="px-4 py-3">
-                            <span className="px-2 py-1 bg-red-100 text-red-800 rounded font-medium text-xs">
-                              {error.errorCode}
-                            </span>
-                          </td>
-                          <td className="px-4 py-3 font-mono text-gray-700">{error.httpStatus}</td>
-                          <td className="px-4 py-3 text-gray-600 text-xs">
-                            {error.errorMessage.substring(0, 50)}...
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            )}
-          </>
-        )}
-
-        {!loading && jobs.length === 0 && errors.length === 0 && (
-          <div className="bg-white rounded-lg shadow-md p-12 text-center">
-            <p className="text-gray-600 text-lg">
-              👆 Start by entering a search term and selecting companies
-            </p>
+              <button onClick={handleSearch} disabled={loading} className="btn w-100"
+                style={{ backgroundColor: '#2c3e50', color: '#ecf0f1', fontWeight: '600', opacity: loading ? 0.6 : 1 }}>
+                {loading ? 'Searching...' : 'Search Jobs'}
+              </button>
+            </div>
           </div>
-        )}
+
+          {/* Results Section */}
+          {(jobs.length > 0 || errors.length > 0) && (
+            <>
+              {/* Jobs Table */}
+              {jobs.length > 0 && (
+                <div className="card shadow-sm mb-5">
+                  <div className="card-header" style={{ backgroundColor: '#34495e', color: '#ecf0f1' }}>
+                    <div className="row align-items-center">
+                      <div className="col">
+                        <h5 className="mb-0">Search Results ({filteredAndSortedJobs.length})</h5>
+                      </div>
+                      <div className="col-auto">
+                        <button onClick={downloadJobsCSV} className="btn btn-sm" style={{ backgroundColor: '#555', color: '#ecf0f1' }}>
+                          Download CSV
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="card-body">
+                    <div className="mb-3">
+                      <input type="text" className="form-control form-control-sm" placeholder="Filter results..."
+                        value={jobsSearchFilter}
+                        onChange={(e) => {
+                          setJobsSearchFilter(e.target.value);
+                          setJobsCurrentPage(1);
+                        }}
+                        style={{ borderColor: '#bdc3c7' }} />
+                    </div>
+                    <div className="table-responsive">
+                      <table className="table table-hover table-sm">
+                        <thead style={{ backgroundColor: '#ecf0f1' }}>
+                          <tr>
+                            <th style={{ color: '#2c3e50', fontWeight: '600', width: '50px' }}>No.</th>
+                            <th style={{ color: '#2c3e50', fontWeight: '600', width: '100px' }}>Company</th>
+                            <th onClick={() => sortJobs('jobTitle')}
+                              style={{ color: '#2c3e50', fontWeight: 'bold', cursor: 'pointer', userSelect: 'none' }}
+                              title="Click to sort">
+                              Job Title {jobsSortField === 'jobTitle' && (jobsSortOrder === 'asc' ? '▲' : '▼')}
+                            </th>
+                            <th style={{ color: '#2c3e50', fontWeight: '600', width: '150px' }}>
+                              Description
+                              <div style={{ fontSize: '0.7rem', fontWeight: 'normal', marginTop: '4px', color: '#888' }}>
+                                (Click to expand)
+                              </div>
+                            </th>
+                            <th onClick={() => sortJobs('expiryDate')}
+                              style={{ color: '#2c3e50', fontWeight: 'bold', cursor: 'pointer', userSelect: 'none', width: '100px' }}
+                              title="Click to sort">
+                              Expiry {jobsSortField === 'expiryDate' && (jobsSortOrder === 'asc' ? '▲' : '▼')}
+                            </th>
+                            <th style={{ color: '#2c3e50', fontWeight: '600', width: '80px' }}>View</th>
+                            <th style={{ color: '#2c3e50', fontWeight: '600', width: '80px' }}>Apply</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {paginatedJobs.map((job, idx) => (
+                            <tr key={idx} style={{ borderColor: '#bdc3c7' }}>
+                              <td style={{ color: '#34495e', fontWeight: '500' }}>
+                                {(jobsCurrentPage - 1) * itemsPerPage + idx + 1}
+                              </td>
+                              <td>
+                                <span className="badge" style={{ backgroundColor: '#2c3e50', color: '#ecf0f1', textTransform: 'uppercase', fontSize: '0.7rem' }}>
+                                  {job.company}
+                                </span>
+                              </td>
+                              <td style={{ color: '#34495e', fontWeight: '500' }}>{job.jobTitle}</td>
+                              <td style={{ color: '#555', fontSize: '0.85rem', cursor: 'help', maxWidth: '150px', position: 'relative' }}
+                                title={job.description && job.description !== 'N/A' ? job.description : 'No full description available from search API'}
+                                onClick={() => setExpandedDesc(expandedDesc === job.sno ? null : job.sno)}>
+                                <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', textDecoration: job.description && job.description !== 'N/A' ? 'underline' : 'none' }}>
+                                  {job.description && job.description !== 'N/A' ? job.description.substring(0, 40) + '...' : 'ℹ️ No description'}
+                                </div>
+                                {expandedDesc === job.sno && job.description && job.description !== 'N/A' && (
+                                  <div style={{ position: 'fixed', backgroundColor: '#fff', border: '2px solid #2c3e50', padding: '10px', borderRadius: '4px', zIndex: 1000, maxWidth: '400px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)', marginTop: '5px', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
+                                    {job.description}
+                                  </div>
+                                )}
+                              </td>
+                              <td style={{ color: '#555', fontSize: '0.85rem' }}>{job.expiryDate}</td>
+                              <td>
+                                <a href={job.url} target="_blank" rel="noopener noreferrer" style={{ color: '#2c3e50', textDecoration: 'none', fontSize: '0.85rem', fontWeight: '500' }}>
+                                  View
+                                </a>
+                              </td>
+                              <td>
+                                <a href={job.applyLink} target="_blank" rel="noopener noreferrer" style={{ color: '#2c3e50', textDecoration: 'none', fontSize: '0.85rem', fontWeight: '500' }}>
+                                  Apply
+                                </a>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                    <PaginationControls currentPage={jobsCurrentPage} pageCount={jobsPageCount} onPageChange={setJobsCurrentPage} itemsPerPage={itemsPerPage} onItemsPerPageChange={setItemsPerPage} />
+                  </div>
+                </div>
+              )}
+
+              {/* Errors Table */}
+              {errors.length > 0 && (
+                <div className="card shadow-sm">
+                  <div className="card-header" style={{ backgroundColor: '#c0392b', color: '#ecf0f1' }}>
+                    <div className="row align-items-center">
+                      <div className="col">
+                        <h5 className="mb-0">Issues ({filteredAndSortedErrors.length})</h5>
+                      </div>
+                      <div className="col-auto">
+                        <button onClick={downloadErrorsCSV} className="btn btn-sm" style={{ backgroundColor: '#a93226', color: '#ecf0f1' }}>
+                          Download CSV
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="card-body">
+                    <div className="mb-3">
+                      <input type="text" className="form-control form-control-sm" placeholder="Filter issues..."
+                        value={errorsSearchFilter}
+                        onChange={(e) => {
+                          setErrorsSearchFilter(e.target.value);
+                          setErrorsCurrentPage(1);
+                        }}
+                        style={{ borderColor: '#bdc3c7' }} />
+                    </div>
+                    <div className="table-responsive">
+                      <table className="table table-hover table-sm">
+                        <thead style={{ backgroundColor: '#ecf0f1' }}>
+                          <tr>
+                            <th style={{ color: '#2c3e50', fontWeight: '600', width: '50px' }}>No.</th>
+                            <th style={{ color: '#2c3e50', fontWeight: '600', width: '100px' }}>Company</th>
+                            <th onClick={() => sortErrors('url')}
+                              style={{ color: '#2c3e50', fontWeight: 'bold', cursor: 'pointer', userSelect: 'none' }}
+                              title="Click to sort">
+                              URL {errorsSortField === 'url' && (errorsSortOrder === 'asc' ? '▲' : '▼')}
+                            </th>
+                            <th onClick={() => sortErrors('errorCode')}
+                              style={{ color: '#2c3e50', fontWeight: 'bold', cursor: 'pointer', userSelect: 'none' }}
+                              title="Click to sort">
+                              Error Code {errorsSortField === 'errorCode' && (errorsSortOrder === 'asc' ? '▲' : '▼')}
+                            </th>
+                            <th style={{ color: '#2c3e50', fontWeight: '600', width: '100px' }}>Status</th>
+                            <th style={{ color: '#2c3e50', fontWeight: '600' }}>Message</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {paginatedErrors.map((error, idx) => (
+                            <tr key={idx} style={{ borderColor: '#bdc3c7' }}>
+                              <td style={{ color: '#34495e' }}>
+                                {(errorsCurrentPage - 1) * itemsPerPage + idx + 1}
+                              </td>
+                              <td>
+                                <span className="badge" style={{ backgroundColor: '#c0392b', color: '#ecf0f1', textTransform: 'uppercase', fontSize: '0.7rem' }}>
+                                  {error.company}
+                                </span>
+                              </td>
+                              <td>
+                                <a href={error.url} target="_blank" rel="noopener noreferrer" style={{ color: '#2c3e50', textDecoration: 'none', fontSize: '0.85rem' }}>
+                                  {error.url.substring(0, 40)}...
+                                </a>
+                              </td>
+                              <td style={{ color: '#555', fontFamily: 'monospace', fontSize: '0.85rem' }}>
+                                {error.errorCode}
+                              </td>
+                              <td style={{ color: '#555', fontSize: '0.85rem' }}>{error.httpStatus}</td>
+                              <td style={{ color: '#555', fontSize: '0.85rem' }}>
+                                {error.errorMessage.substring(0, 50)}...
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                    <PaginationControls currentPage={errorsCurrentPage} pageCount={errorsPageCount} onPageChange={setErrorsCurrentPage} itemsPerPage={itemsPerPage} onItemsPerPageChange={setItemsPerPage} />
+                  </div>
+                </div>
+              )}
+            </>
+          )}
+
+          {!loading && jobs.length === 0 && errors.length === 0 && (
+            <div className="card shadow-sm text-center">
+              <div className="card-body py-5">
+                <p style={{ color: '#555', fontSize: '1.1rem' }}>
+                  Enter a search term and select companies to begin
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
+
+      {/* Footer */}
+      <footer style={{ backgroundColor: '#34495e', color: '#ecf0f1', padding: '2rem', marginTop: '2rem' }}>
+        <div className="container">
+          <div className="row">
+            <div className="col-md-6">
+              <p className="mb-0">
+                <strong>JobSearchMCP</strong> - Multi-company job search aggregator
+              </p>
+            </div>
+            <div className="col-md-6 text-md-end">
+              <p className="mb-0">
+                Developer: <strong>Saurabh</strong> | License: <strong>MIT</strong>
+              </p>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

@@ -78,9 +78,9 @@ export class SearchExecutor {
       // Fall back to HTML parsing with pagination support
       const allResults: SearchResult[] = [];
       let pageNum = 1;
-      let maxPages = 5; // Limit to 5 pages per search to avoid excessive requests
+      let maxPages = 50; // Increased to fetch all available pages (no limit on total results)
 
-      while (pageNum <= maxPages && allResults.length < 100) {
+      while (pageNum <= maxPages) {
         const pageUrl = this.getPageUrl(searchUrl, companyId, pageNum);
 
         try {
